@@ -35,3 +35,28 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Environment Variables & Secrets ###
+.env
+.env.local
+.env.*.local
+*.env
+
+### OS Files ###
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+### Application Logs ###
+logs/
+*.log
+*.log.*
+*.gz
+
+### Temporary Files ###
+*.tmp
+*.temp
+*.bak
+*.cache
