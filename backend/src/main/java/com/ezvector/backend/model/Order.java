@@ -49,6 +49,9 @@ public class Order
     }
     orderItems = new ArrayList<OrderItem>();
   }
+    public Order()
+    {
+    }
 
   //------------------------
   // INTERFACE

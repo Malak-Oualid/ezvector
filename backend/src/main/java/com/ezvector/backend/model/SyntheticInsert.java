@@ -57,6 +57,10 @@ public class SyntheticInsert extends Plasmid
       throw new RuntimeException("Unable to create syntheticInsert due to backbone. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+    public SyntheticInsert()
+    {
+        super();
+    }
 
   //------------------------
   // INTERFACE

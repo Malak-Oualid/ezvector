@@ -42,6 +42,10 @@ public class MultiFragment extends Plasmid
     }
     fragments = new ArrayList<Fragment>();
   }
+    public MultiFragment()
+    {
+        super();
+    }
 
   //------------------------
   // INTERFACE

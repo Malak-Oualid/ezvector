@@ -20,6 +20,10 @@ public class Manager extends Person
   {
     super(aUserID, aEmail, aPassword, aFirstName, aLastName);
   }
+    public Manager()
+    {
+        super();
+    }
 
   //------------------------
   // INTERFACE

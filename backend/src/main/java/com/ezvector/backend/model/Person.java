@@ -31,6 +31,9 @@ public abstract class Person
     firstName = aFirstName;
     lastName = aLastName;
   }
+    public Person()
+    {
+    }
 
   //------------------------
   // INTERFACE

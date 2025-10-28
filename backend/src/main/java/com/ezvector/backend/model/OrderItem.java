@@ -45,6 +45,9 @@ public class OrderItem
       throw new RuntimeException("Unable to create correspondingOrderItem due to correspondingPlasmid. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+    public OrderItem()
+    {
+    }
 
   //------------------------
   // INTERFACE

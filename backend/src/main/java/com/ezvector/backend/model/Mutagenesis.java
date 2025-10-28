@@ -42,6 +42,10 @@ public class Mutagenesis extends Plasmid
       throw new RuntimeException("Unable to create mutagenesi due to backbone. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+    public Mutagenesis()
+    {
+        super();
+    }
 
   //------------------------
   // INTERFACE

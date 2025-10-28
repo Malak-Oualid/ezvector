@@ -92,6 +92,9 @@ public class Fragment
     }
     mutagenesis = new ArrayList<Mutagenesis>();
   }
+    public Fragment()
+    {
+    }
 
   //------------------------
   // INTERFACE

@@ -35,6 +35,10 @@ public class Customer extends Person
     customerOrders = new ArrayList<Order>();
     customerBackbones = new ArrayList<Fragment>();
   }
+    public Customer()
+    {
+    super();
+    }
 
   //------------------------
   // INTERFACE

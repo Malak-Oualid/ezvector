@@ -29,6 +29,9 @@ public class Address
     state = aState;
     zipCode = aZipCode;
   }
+    public Address()
+    {
+    }
 
   //------------------------
   // INTERFACE

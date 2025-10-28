@@ -36,6 +36,10 @@ public class OwnBackbone extends Plasmid
     super(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved);
     fragments = new ArrayList<Fragment>();
   }
+    public OwnBackbone()
+    {
+        super();
+    }
 
   //------------------------
   // INTERFACE

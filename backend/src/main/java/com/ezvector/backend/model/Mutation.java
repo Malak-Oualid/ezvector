@@ -31,6 +31,9 @@ public class Mutation
       throw new RuntimeException("Unable to create mutation due to mutagenesis. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+    public Mutation()
+    {
+    }
 
   //------------------------
   // INTERFACE

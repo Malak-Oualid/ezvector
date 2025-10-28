@@ -41,6 +41,9 @@ public class Plasmid
     isSaved = aIsSaved;
     primers = new ArrayList<Primer>();
   }
+    public Plasmid()
+    {
+    }
 
   //------------------------
   // INTERFACE
