@@ -3,6 +3,7 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 
 
 import java.sql.Date;
+import com.ezvector.backend.model.Fragment.DNAsource;
 
 // line 72 "model.ump"
 // line 160 "model.ump"
