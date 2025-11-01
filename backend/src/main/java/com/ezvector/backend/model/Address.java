@@ -94,6 +94,11 @@ public class Address
     return zipCode;
   }
 
+  public int getAddressId()
+  {
+    return addressId;
+  }
+
   public void delete()
   {}
 
