@@ -45,4 +45,31 @@ public class AddressRepositoryTests {
         assertEquals(testAddress.getState(), testAddressFromDb.getState());
         assertEquals(testAddress.getZipCode(), testAddressFromDb.getZipCode());
     }
+    @Test
+    public void testPersistAndLoadAddress2(){
+        String street = "street2";
+        String city = "city2";
+        String state = "state2";
+        String zipcode = "zipcode2";
+        Address testAddress = new Address();
+        testAddress.setStreet(street);
+        testAddress.setCity(city);
+        testAddress.setState(state);
+        testAddress.setZipCode(zipcode);
+
+        //save address
+        testAddress = addressRepository.save(testAddress);
+        int addressId = testAddress.getAddressId();
+
+        //read from db
+        Address testAddressFromDb = addressRepository.findAddressByAddressId(addressId);
+
+        //assert correct responses
+        assertNotNull(testAddressFromDb);
+        assertEquals(testAddress.getAddressId(), testAddressFromDb.getAddressId());
+        assertEquals(testAddress.getStreet(), testAddressFromDb.getStreet());
+        assertEquals(testAddress.getCity(), testAddressFromDb.getCity());
+        assertEquals(testAddress.getState(), testAddressFromDb.getState());
+        assertEquals(testAddress.getZipCode(), testAddressFromDb.getZipCode());
+    }
 }
