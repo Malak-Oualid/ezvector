@@ -2,17 +2,23 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.*;
 
 // line 68 "model.ump"
 // line 155 "model.ump"
+@Entity
 public class Primer
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
+    @Id
+    @GeneratedValue
+    private int primerId;
 
   //Primer Associations
+    @ManyToOne
   private Plasmid plasmid;
 
   //------------------------
@@ -27,6 +33,8 @@ public class Primer
       throw new RuntimeException("Unable to create primer due to plasmid. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+
+  public Primer(){}
 
   //------------------------
   // INTERFACE

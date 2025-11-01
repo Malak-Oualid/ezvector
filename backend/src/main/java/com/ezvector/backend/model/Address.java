@@ -2,9 +2,13 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 // line 33 "model.ump"
 // line 125 "model.ump"
+@Entity
 public class Address
 {
 
@@ -13,6 +17,9 @@ public class Address
   //------------------------
 
   //Address Attributes
+    @Id
+    @GeneratedValue
+    private int addressId;
   private String street;
   private String city;
   private String state;
@@ -29,6 +36,7 @@ public class Address
     state = aState;
     zipCode = aZipCode;
   }
+  public Address(){}
 
   //------------------------
   // INTERFACE

@@ -2,9 +2,11 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.Entity;
 
 // line 2 "model.ump"
 // line 130 "model.ump"
+@Entity
 public class Manager extends Person
 {
 
@@ -20,6 +22,7 @@ public class Manager extends Person
   {
     super(aUserID, aEmail, aPassword, aFirstName, aLastName);
   }
+  public Manager(){}
 
   //------------------------
   // INTERFACE

@@ -2,9 +2,14 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 // line 103 "model.ump"
 // line 180 "model.ump"
+@Entity
 public class Mutation
 {
 
@@ -13,9 +18,13 @@ public class Mutation
   //------------------------
 
   //Mutation Attributes
+    @Id
+    @GeneratedValue
+    private int mutationId;
   private String sequence;
 
   //Mutation Associations
+    @ManyToOne
   private Mutagenesis mutagenesis;
 
   //------------------------
@@ -31,6 +40,7 @@ public class Mutation
       throw new RuntimeException("Unable to create mutation due to mutagenesis. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+  public Mutation(){}
 
   //------------------------
   // INTERFACE

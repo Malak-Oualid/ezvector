@@ -2,9 +2,13 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 // line 23 "model.ump"
 // line 120 "model.ump"
+@MappedSuperclass
 public abstract class Person
 {
 
@@ -13,6 +17,8 @@ public abstract class Person
   //------------------------
 
   //Person Attributes
+    @Id
+    @GeneratedValue
   private int userID;
   private String email;
   private String password;
@@ -31,6 +37,7 @@ public abstract class Person
     firstName = aFirstName;
     lastName = aLastName;
   }
+  public Person(){}
 
   //------------------------
   // INTERFACE

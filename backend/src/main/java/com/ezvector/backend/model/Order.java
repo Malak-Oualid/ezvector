@@ -2,11 +2,14 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.*;
+
 import java.sql.Date;
 import java.util.*;
 
 // line 41 "model.ump"
 // line 140 "model.ump"
+@Entity
 public class Order
 {
 
@@ -21,14 +24,20 @@ public class Order
   //------------------------
 
   //Order Attributes
+    @Id
+    @GeneratedValue
   private int orderID;
+  @Temporal(TemporalType.DATE)
   private Date datePlaced;
+    @Temporal(TemporalType.DATE)
   private Date dateReceived;
   private int totalOrderPrice;
   private OrderStatus status;
 
   //Order Associations
+    @ManyToOne
   private Customer customerOrdering;
+    @OneToMany
   private List<OrderItem> orderItems;
 
   //------------------------
@@ -49,6 +58,7 @@ public class Order
     }
     orderItems = new ArrayList<OrderItem>();
   }
+  public Order(){}
 
   //------------------------
   // INTERFACE

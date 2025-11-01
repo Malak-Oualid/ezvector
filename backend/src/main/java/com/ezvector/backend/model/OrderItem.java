@@ -2,9 +2,11 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.*;
 
 // line 50 "model.ump"
 // line 145 "model.ump"
+@Entity
 public class OrderItem
 {
 
@@ -19,11 +21,15 @@ public class OrderItem
   //------------------------
 
   //OrderItem Attributes
+    @Id
+    @GeneratedValue
   private int orderItemID;
   private OrderItemStatus status;
 
   //OrderItem Associations
+    @ManyToOne
   private Order correspondingOrder;
+    @OneToOne
   private Plasmid correspondingPlasmid;
 
   //------------------------
@@ -45,6 +51,7 @@ public class OrderItem
       throw new RuntimeException("Unable to create correspondingOrderItem due to correspondingPlasmid. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+  public OrderItem(){}
 
   //------------------------
   // INTERFACE

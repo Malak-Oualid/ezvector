@@ -2,11 +2,16 @@ package com.ezvector.backend.model;/*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+
 import java.util.*;
 import java.sql.Date;
 
 // line 10 "model.ump"
 // line 135 "model.ump"
+@Entity
 public class Customer extends Person
 {
 
@@ -18,9 +23,13 @@ public class Customer extends Person
   private boolean valid;
 
   //Customer Associations
+    @OneToOne
   private Address deliveryAddress;
+    @OneToMany
   private List<Plasmid> customerCart;
+    @OneToMany
   private List<Order> customerOrders;
+    @OneToMany
   private List<Fragment> customerBackbones;
 
   //------------------------
@@ -35,6 +44,7 @@ public class Customer extends Person
     customerOrders = new ArrayList<Order>();
     customerBackbones = new ArrayList<Fragment>();
   }
+  public Customer(){}
 
   //------------------------
   // INTERFACE
