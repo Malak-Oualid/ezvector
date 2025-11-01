@@ -15,7 +15,7 @@ public class Plasmid
   //------------------------
 
   //Plasmid Attributes
-  private String plasmidID;
+  private int plasmidID;
   private String plasmidName;
   private String plasmidSequence;
   private int totalPlasmidPrice;
@@ -31,7 +31,7 @@ public class Plasmid
   // CONSTRUCTOR
   //------------------------
 
-  public Plasmid(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
+  public Plasmid(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
   {
     plasmidID = aPlasmidID;
     plasmidName = aPlasmidName;
@@ -41,15 +41,12 @@ public class Plasmid
     isSaved = aIsSaved;
     primers = new ArrayList<Primer>();
   }
-    public Plasmid()
-    {
-    }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setPlasmidID(String aPlasmidID)
+  public boolean setPlasmidID(int aPlasmidID)
   {
     boolean wasSet = false;
     plasmidID = aPlasmidID;
@@ -97,7 +94,7 @@ public class Plasmid
     return wasSet;
   }
 
-  public String getPlasmidID()
+  public int getPlasmidID()
   {
     return plasmidID;
   }

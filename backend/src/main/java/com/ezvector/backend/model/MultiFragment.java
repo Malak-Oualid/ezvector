@@ -32,7 +32,7 @@ public class MultiFragment extends Plasmid
   // CONSTRUCTOR
   //------------------------
 
-  public MultiFragment(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aBackbone)
+  public MultiFragment(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aBackbone)
   {
     super(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved);
     boolean didAddBackbone = setBackbone(aBackbone);
@@ -42,10 +42,6 @@ public class MultiFragment extends Plasmid
     }
     fragments = new ArrayList<Fragment>();
   }
-    public MultiFragment()
-    {
-        super();
-    }
 
   //------------------------
   // INTERFACE
@@ -121,7 +117,7 @@ public class MultiFragment extends Plasmid
     return 5;
   }
   /* Code from template association_AddMNToOnlyOne */
-  public Fragment addFragment(String aFragmentID, Fragment.DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, SyntheticInsert aSyntheticInsert, OwnBackbone aOwnBackbone)
+  public Fragment addFragment(int aFragmentID, Fragment.DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, SyntheticInsert aSyntheticInsert, OwnBackbone aOwnBackbone)
   {
     if (numberOfFragments() >= maximumNumberOfFragments())
     {

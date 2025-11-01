@@ -21,7 +21,7 @@ public class Order
   //------------------------
 
   //Order Attributes
-  private String orderID;
+  private int orderID;
   private Date datePlaced;
   private Date dateReceived;
   private int totalOrderPrice;
@@ -35,7 +35,7 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(String aOrderID, Date aDatePlaced, Date aDateReceived, int aTotalOrderPrice, OrderStatus aStatus, Customer aCustomerOrdering)
+  public Order(int aOrderID, Date aDatePlaced, Date aDateReceived, int aTotalOrderPrice, OrderStatus aStatus, Customer aCustomerOrdering)
   {
     orderID = aOrderID;
     datePlaced = aDatePlaced;
@@ -49,15 +49,12 @@ public class Order
     }
     orderItems = new ArrayList<OrderItem>();
   }
-    public Order()
-    {
-    }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setOrderID(String aOrderID)
+  public boolean setOrderID(int aOrderID)
   {
     boolean wasSet = false;
     orderID = aOrderID;
@@ -97,7 +94,7 @@ public class Order
     return wasSet;
   }
 
-  public String getOrderID()
+  public int getOrderID()
   {
     return orderID;
   }
@@ -187,7 +184,7 @@ public class Order
     return 1;
   }
   /* Code from template association_AddMandatoryManyToOne */
-  public OrderItem addOrderItem(String aOrderItemID, OrderItem.OrderItemStatus aStatus, Plasmid aCorrespondingPlasmid)
+  public OrderItem addOrderItem(int aOrderItemID, OrderItem.OrderItemStatus aStatus, Plasmid aCorrespondingPlasmid)
   {
     OrderItem aNewOrderItem = new OrderItem(aOrderItemID, aStatus, this, aCorrespondingPlasmid);
     return aNewOrderItem;

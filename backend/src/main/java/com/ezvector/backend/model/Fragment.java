@@ -21,7 +21,7 @@ public class Fragment
   //------------------------
 
   //Fragment Attributes
-  private String fragmentID;
+  private int fragmentID;
   private DNAsource dnaSource;
   private String sequence;
   private boolean toBeOrdered;
@@ -41,7 +41,7 @@ public class Fragment
   // CONSTRUCTOR
   //------------------------
 
-  public Fragment(String aFragmentID, DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, SyntheticInsert aSyntheticInsert, MultiFragment aMultiFragment, OwnBackbone aOwnBackbone)
+  public Fragment(int aFragmentID, DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, SyntheticInsert aSyntheticInsert, MultiFragment aMultiFragment, OwnBackbone aOwnBackbone)
   {
     fragmentID = aFragmentID;
     dnaSource = aDnaSource;
@@ -69,7 +69,7 @@ public class Fragment
     mutagenesis = new ArrayList<Mutagenesis>();
   }
 
-  public Fragment(String aFragmentID, DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, String aPlasmidIDForSyntheticInsert, String aPlasmidNameForSyntheticInsert, String aPlasmidSequenceForSyntheticInsert, int aTotalPlasmidPriceForSyntheticInsert, Date aDateCreatedForSyntheticInsert, boolean aIsSavedForSyntheticInsert, Fragment aBackboneForSyntheticInsert, MultiFragment aMultiFragment, OwnBackbone aOwnBackbone)
+  public Fragment(int aFragmentID, DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, int aPlasmidIDForSyntheticInsert, String aPlasmidNameForSyntheticInsert, String aPlasmidSequenceForSyntheticInsert, int aTotalPlasmidPriceForSyntheticInsert, Date aDateCreatedForSyntheticInsert, boolean aIsSavedForSyntheticInsert, Fragment aBackboneForSyntheticInsert, MultiFragment aMultiFragment, OwnBackbone aOwnBackbone)
   {
     fragmentID = aFragmentID;
     dnaSource = aDnaSource;
@@ -92,15 +92,12 @@ public class Fragment
     }
     mutagenesis = new ArrayList<Mutagenesis>();
   }
-    public Fragment()
-    {
-    }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setFragmentID(String aFragmentID)
+  public boolean setFragmentID(int aFragmentID)
   {
     boolean wasSet = false;
     fragmentID = aFragmentID;
@@ -148,7 +145,7 @@ public class Fragment
     return wasSet;
   }
 
-  public String getFragmentID()
+  public int getFragmentID()
   {
     return fragmentID;
   }
@@ -331,7 +328,7 @@ public class Fragment
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public SyntheticInsert addSyntheticInsert(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aSyntheticInsert)
+  public SyntheticInsert addSyntheticInsert(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aSyntheticInsert)
   {
     return new SyntheticInsert(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved, aSyntheticInsert, this);
   }
@@ -403,7 +400,7 @@ public class Fragment
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public MultiFragment addMultiFragment(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
+  public MultiFragment addMultiFragment(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
   {
     return new MultiFragment(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved, this);
   }
@@ -537,7 +534,7 @@ public class Fragment
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Mutagenesis addMutagenesi(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
+  public Mutagenesis addMutagenesi(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
   {
     return new Mutagenesis(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved, this);
   }

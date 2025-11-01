@@ -32,7 +32,7 @@ public class SyntheticInsert extends Plasmid
   // CONSTRUCTOR
   //------------------------
 
-  public SyntheticInsert(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aSyntheticInsert, Fragment aBackbone)
+  public SyntheticInsert(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aSyntheticInsert, Fragment aBackbone)
   {
     super(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved);
     if (aSyntheticInsert == null || aSyntheticInsert.getSyntheticInsert() != null)
@@ -47,7 +47,7 @@ public class SyntheticInsert extends Plasmid
     }
   }
 
-  public SyntheticInsert(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, String aFragmentIDForSyntheticInsert, DNAsource aDnaSourceForSyntheticInsert, String aSequenceForSyntheticInsert, boolean aToBeOrderedForSyntheticInsert, boolean aValidForSyntheticInsert, boolean aIsBackboneForSyntheticInsert, MultiFragment aMultiFragmentForSyntheticInsert, OwnBackbone aOwnBackboneForSyntheticInsert, Fragment aBackbone)
+  public SyntheticInsert(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, int aFragmentIDForSyntheticInsert, DNAsource aDnaSourceForSyntheticInsert, String aSequenceForSyntheticInsert, boolean aToBeOrderedForSyntheticInsert, boolean aValidForSyntheticInsert, boolean aIsBackboneForSyntheticInsert, MultiFragment aMultiFragmentForSyntheticInsert, OwnBackbone aOwnBackboneForSyntheticInsert, Fragment aBackbone)
   {
     super(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved);
     syntheticInsert = new Fragment(aFragmentIDForSyntheticInsert, aDnaSourceForSyntheticInsert, aSequenceForSyntheticInsert, aToBeOrderedForSyntheticInsert, aValidForSyntheticInsert, aIsBackboneForSyntheticInsert, this, aMultiFragmentForSyntheticInsert, aOwnBackboneForSyntheticInsert);
@@ -57,10 +57,6 @@ public class SyntheticInsert extends Plasmid
       throw new RuntimeException("Unable to create syntheticInsert due to backbone. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
-    public SyntheticInsert()
-    {
-        super();
-    }
 
   //------------------------
   // INTERFACE

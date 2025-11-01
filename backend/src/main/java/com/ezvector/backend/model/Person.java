@@ -13,7 +13,7 @@ public abstract class Person
   //------------------------
 
   //Person Attributes
-  private String userID;
+  private int userID;
   private String email;
   private String password;
   private String firstName;
@@ -23,7 +23,7 @@ public abstract class Person
   // CONSTRUCTOR
   //------------------------
 
-  public Person(String aUserID, String aEmail, String aPassword, String aFirstName, String aLastName)
+  public Person(int aUserID, String aEmail, String aPassword, String aFirstName, String aLastName)
   {
     userID = aUserID;
     email = aEmail;
@@ -31,15 +31,12 @@ public abstract class Person
     firstName = aFirstName;
     lastName = aLastName;
   }
-    public Person()
-    {
-    }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setUserID(String aUserID)
+  public boolean setUserID(int aUserID)
   {
     boolean wasSet = false;
     userID = aUserID;
@@ -79,7 +76,7 @@ public abstract class Person
     return wasSet;
   }
 
-  public String getUserID()
+  public int getUserID()
   {
     return userID;
   }

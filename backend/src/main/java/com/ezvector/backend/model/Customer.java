@@ -27,7 +27,7 @@ public class Customer extends Person
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUserID, String aEmail, String aPassword, String aFirstName, String aLastName, boolean aValid)
+  public Customer(int aUserID, String aEmail, String aPassword, String aFirstName, String aLastName, boolean aValid)
   {
     super(aUserID, aEmail, aPassword, aFirstName, aLastName);
     valid = aValid;
@@ -35,10 +35,6 @@ public class Customer extends Person
     customerOrders = new ArrayList<Order>();
     customerBackbones = new ArrayList<Fragment>();
   }
-    public Customer()
-    {
-    super();
-    }
 
   //------------------------
   // INTERFACE
@@ -247,7 +243,7 @@ public class Customer extends Person
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addCustomerOrder(String aOrderID, Date aDatePlaced, Date aDateReceived, int aTotalOrderPrice, Order.OrderStatus aStatus)
+  public Order addCustomerOrder(int aOrderID, Date aDatePlaced, Date aDateReceived, int aTotalOrderPrice, Order.OrderStatus aStatus)
   {
     return new Order(aOrderID, aDatePlaced, aDateReceived, aTotalOrderPrice, aStatus, this);
   }

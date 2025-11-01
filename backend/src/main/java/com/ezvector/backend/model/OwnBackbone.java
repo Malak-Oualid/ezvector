@@ -31,15 +31,11 @@ public class OwnBackbone extends Plasmid
   // CONSTRUCTOR
   //------------------------
 
-  public OwnBackbone(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
+  public OwnBackbone(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved)
   {
     super(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved);
     fragments = new ArrayList<Fragment>();
   }
-    public OwnBackbone()
-    {
-        super();
-    }
 
   //------------------------
   // INTERFACE
@@ -91,7 +87,7 @@ public class OwnBackbone extends Plasmid
     return 5;
   }
   /* Code from template association_AddMNToOnlyOne */
-  public Fragment addFragment(String aFragmentID, Fragment.DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, SyntheticInsert aSyntheticInsert, MultiFragment aMultiFragment)
+  public Fragment addFragment(int aFragmentID, Fragment.DNAsource aDnaSource, String aSequence, boolean aToBeOrdered, boolean aValid, boolean aIsBackbone, SyntheticInsert aSyntheticInsert, MultiFragment aMultiFragment)
   {
     if (numberOfFragments() >= maximumNumberOfFragments())
     {

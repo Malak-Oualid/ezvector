@@ -16,14 +16,10 @@ public class Manager extends Person
   // CONSTRUCTOR
   //------------------------
 
-  public Manager(String aUserID, String aEmail, String aPassword, String aFirstName, String aLastName)
+  public Manager(int aUserID, String aEmail, String aPassword, String aFirstName, String aLastName)
   {
     super(aUserID, aEmail, aPassword, aFirstName, aLastName);
   }
-    public Manager()
-    {
-        super();
-    }
 
   //------------------------
   // INTERFACE

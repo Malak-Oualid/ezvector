@@ -19,7 +19,7 @@ public class OrderItem
   //------------------------
 
   //OrderItem Attributes
-  private String orderItemID;
+  private int orderItemID;
   private OrderItemStatus status;
 
   //OrderItem Associations
@@ -30,7 +30,7 @@ public class OrderItem
   // CONSTRUCTOR
   //------------------------
 
-  public OrderItem(String aOrderItemID, OrderItemStatus aStatus, Order aCorrespondingOrder, Plasmid aCorrespondingPlasmid)
+  public OrderItem(int aOrderItemID, OrderItemStatus aStatus, Order aCorrespondingOrder, Plasmid aCorrespondingPlasmid)
   {
     orderItemID = aOrderItemID;
     status = aStatus;
@@ -45,15 +45,12 @@ public class OrderItem
       throw new RuntimeException("Unable to create correspondingOrderItem due to correspondingPlasmid. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
-    public OrderItem()
-    {
-    }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setOrderItemID(String aOrderItemID)
+  public boolean setOrderItemID(int aOrderItemID)
   {
     boolean wasSet = false;
     orderItemID = aOrderItemID;
@@ -69,7 +66,7 @@ public class OrderItem
     return wasSet;
   }
 
-  public String getOrderItemID()
+  public int getOrderItemID()
   {
     return orderItemID;
   }

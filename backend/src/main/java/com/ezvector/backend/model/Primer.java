@@ -27,9 +27,6 @@ public class Primer
       throw new RuntimeException("Unable to create primer due to plasmid. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
-    public Primer()
-    {
-    }
 
   //------------------------
   // INTERFACE

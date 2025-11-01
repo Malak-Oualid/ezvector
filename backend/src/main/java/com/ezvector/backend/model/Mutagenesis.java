@@ -32,7 +32,7 @@ public class Mutagenesis extends Plasmid
   // CONSTRUCTOR
   //------------------------
 
-  public Mutagenesis(String aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aBackbone)
+  public Mutagenesis(int aPlasmidID, String aPlasmidName, String aPlasmidSequence, int aTotalPlasmidPrice, Date aDateCreated, boolean aIsSaved, Fragment aBackbone)
   {
     super(aPlasmidID, aPlasmidName, aPlasmidSequence, aTotalPlasmidPrice, aDateCreated, aIsSaved);
     mutations = new ArrayList<Mutation>();
@@ -42,10 +42,6 @@ public class Mutagenesis extends Plasmid
       throw new RuntimeException("Unable to create mutagenesi due to backbone. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
-    public Mutagenesis()
-    {
-        super();
-    }
 
   //------------------------
   // INTERFACE
