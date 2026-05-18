@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Trash2 } from "lucide-react";
-import { MULTI_INSERT_PRCIING, MULTI_MUTAGENESIS_PRICING, OWN_BACKBONE_PRICING } from "@/config/pricing";
+import { MULTI_INSERT_PRICING, MULTI_MUTAGENESIS_PRICING, OWN_BACKBONE_PRICING } from "@/config/pricing";
 import React, { useState, useEffect } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useNavigate } from "react-router-dom";
@@ -470,7 +470,7 @@ const OrderPage: React.FC = () => {
       surcharges: number;
     }[] = [];
 
-    let total = MULTI_INSERT_PRCIING.BASE_PRICE;
+    let total = MULTI_INSERT_PRICING.BASE_PRICE;
 
     validFragments.forEach((frag, idx) => {
       let price = 0;
@@ -478,16 +478,16 @@ const OrderPage: React.FC = () => {
 
       //first frag included in base price
       if (idx > 0) {
-        price += MULTI_INSERT_PRCIING.ADDITIONAL_FRAGMENT_PRICE;
-        total += MULTI_INSERT_PRCIING.ADDITIONAL_FRAGMENT_PRICE;
+        price += MULTI_INSERT_PRICING.ADDITIONAL_FRAGMENT_PRICE;
+        total += MULTI_INSERT_PRICING.ADDITIONAL_FRAGMENT_PRICE;
       }
 
       const gc = computeGCPercent(frag.seq);
 
-      if (gc > MULTI_INSERT_PRCIING.GC_THRESHOLD_PERCENT)
-        surcharges += MULTI_INSERT_PRCIING.SURCHARGE_PRICE;
-      if (frag.seq.length > MULTI_INSERT_PRCIING.LENGTH_THRESHOLD_BP)
-        surcharges += MULTI_INSERT_PRCIING.SURCHARGE_PRICE;
+      if (gc > MULTI_INSERT_PRICING.GC_THRESHOLD_PERCENT)
+        surcharges += MULTI_INSERT_PRICING.SURCHARGE_PRICE;
+      if (frag.seq.length > MULTI_INSERT_PRICING.LENGTH_THRESHOLD_BP)
+        surcharges += MULTI_INSERT_PRICING.SURCHARGE_PRICE;
 
       total += surcharges;
 
@@ -499,7 +499,7 @@ const OrderPage: React.FC = () => {
     });
 
     return {
-      backbonePrice: MULTI_INSERT_PRCIING.BASE_PRICE,
+      backbonePrice: MULTI_INSERT_PRICING.BASE_PRICE,
       fragments: fragmentPricing,
       total
     };
@@ -573,7 +573,7 @@ const OrderPage: React.FC = () => {
     });
 
     return {
-      basePrice: MULTI_INSERT_PRCIING.BASE_PRICE,
+      basePrice: MULTI_INSERT_PRICING.BASE_PRICE,
       fragments: fragmentPricing,
       total
     };
