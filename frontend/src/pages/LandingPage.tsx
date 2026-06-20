@@ -4,17 +4,9 @@ import Footer from "../components/Footer";
 import { useState } from "react";
 
 /* ── Types ─────────────────────────────────────────── */
-interface StepItem { n: string; title: string; body: string; }
 interface CompareRow { feat: string; us: string; vendors: string; diy: string; }
 
 /* ── Data ───────────────────────────────────────────── */
-
-const STEPS: StepItem[] = [
-  { n: "1", title: "Place your Order", body: "Upload your plasmid design online. Pay with credit card or PO and receive your submission instructions." },
-  { n: "2", title: "Prepare Samples", body: "Prepare your DNA fragments for submission following our simple sample prep guide." },
-  { n: "3", title: "Submit Samples", body: "Place your samples in a dropbox or mail them directly to us. No complicated shipping." },
-  { n: "4", title: "Receive your Plasmid", body: "We'll send your sequence-verified plasmid, ready to use in your experiments." },
-];
 
 const COMPARE_ROWS: CompareRow[] = [
   { feat: "Vector Flexibility", us: "Clone into any plasmid. No vendor lock-in.", vendors: "Restricted to vendor-approved backbones.", diy: "Requires manual prep and compatibility work." },
