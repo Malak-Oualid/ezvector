@@ -6,20 +6,20 @@ interface NavItem { label: string; to?: string; dropdown?: DropdownItem[]; }
 
 const NAV: NavItem[] = [
   { label: "Services", to: "/services", dropdown: [
-      { label: "Single & Multi-Insert Cloning", to: "#" },
-      { label: "Custom Backbone Construction", to: "#" },
-      { label: "Multi-Site & Codon Mutagenesis", to: "#" },
-      { label: "Domain Mutagenesis", to: "#" },
-      { label: "Synthetic DNA Cloning", to: "#" },
+      { label: "Single & Multi-Insert Cloning", to: "/services/multi-insert-cloning" },
+      { label: "Custom Backbone Construction", to: "/services/custom-backbone-construction" },
+      { label: "Multi-Site & Codon Mutagenesis", to: "/services/multi-site-mutagenesis" },
+      { label: "Domain Mutagenesis", to: "/services/domain-mutagenesis" },
+      { label: "Synthetic DNA Cloning", to: "/services/synthetic-dna-cloning" },
     ]},
   { label: "How-to", dropdown: [
-      { label: "Submit Orders", to: "#" },
-      { label: "Submit Samples", to: "#" },
-      { label: "Start a Dropbox", to: "#" },
-      { label: "Cancel an Order", to: "#" },
+      { label: "Submit Orders", to: "/how-to/submit-orders" },
+      { label: "Submit Samples", to: "/how-to/submit-samples" },
+      { label: "Start Dropbox", to: "/how-to/start-dropbox" },
+      { label: "Cancel Order", to: "/how-to/cancel-order" },
     ]},
-  { label: "FAQ", to: "#" },
-  { label: "Contact Us", to: "#" },
+  { label: "FAQ", to: "/faq" },
+  { label: "Contact", to: "/contact" },
 ];
 
 import logoSrc from "../assets/VectorWeave-final2-b.png";
@@ -29,9 +29,9 @@ function NavDropdown({ item }: { item: NavItem }) {
   if (!item.dropdown) {
     return (
         <Link to={item.to ?? "#"}
-           style={{ color: "#4a5a78", textDecoration: "none", fontSize: "0.875rem", fontWeight: 500, transition: "color 0.15s" }}
-           onMouseEnter={e => (e.currentTarget.style.color = "#1d3461")}
-           onMouseLeave={e => (e.currentTarget.style.color = "#4a5a78")}
+           style={{ color: "#4b5563", fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", transition: "color 0.15s" }}
+           onMouseEnter={e => e.currentTarget.style.color = "#111827"}
+           onMouseLeave={e => e.currentTarget.style.color = "#4b5563"}
         >{item.label}</Link>
     );
   }
@@ -40,18 +40,22 @@ function NavDropdown({ item }: { item: NavItem }) {
            onMouseEnter={() => setOpen(true)}
            onMouseLeave={() => setOpen(false)}
       >
-        <Link to={item.to ?? "#"} style={{ background: "none", border: "none", cursor: "pointer", color: "#4a5a78", fontSize: "0.875rem", fontWeight: 500, fontFamily: "inherit", display: "flex", alignItems: "center", gap: 4, padding: 0, textDecoration: "none" }}>
-          {item.label} <span style={{ fontSize: "0.7rem", opacity: 0.6 }}>▾</span>
+        <Link to={item.to ?? "#"} style={{ display: "flex", alignItems: "center", gap: "0.25rem", color: "#4b5563", fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", transition: "color 0.15s" }}
+           onMouseEnter={e => e.currentTarget.style.color = "#111827"}
+           onMouseLeave={e => e.currentTarget.style.color = "#4b5563"}
+        >
+          {item.label} <span style={{ fontSize: "0.75rem", opacity: 0.6 }}>▾</span>
         </Link>
         {open && (
-            <div style={{ position: "absolute", top: "100%", left: 0, paddingTop: 12, zIndex: 50, minWidth: 240 }}>
-              <div style={{ background: "#fff", border: "1px solid #d4dae8", borderRadius: 10, padding: "0.5rem 0", boxShadow: "0 8px 32px rgba(29,52,97,0.12)" }}>
+            <div style={{ position: "absolute", top: "100%", left: 0, paddingTop: "0.75rem", zIndex: 50, minWidth: "15rem" }}>
+              <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: "0.5rem 0", boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}>
                 {item.dropdown.map(d => (
-                    <Link key={d.label} to={d.to}
-                       style={{ display: "block", padding: "0.6rem 1.25rem", fontSize: "0.84rem", color: "#4a5a78", textDecoration: "none", transition: "background 0.12s, color 0.12s" }}
-                       onMouseEnter={e => { e.currentTarget.style.background = "#eef1f7"; e.currentTarget.style.color = "#1d3461"; }}
-                       onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#4a5a78"; }}
-                    >{d.label}</Link>
+                    <Link key={d.label} to={d.to} style={{ display: "block", padding: "0.625rem 1.25rem", fontSize: "0.875rem", color: "#4b5563", textDecoration: "none", transition: "all 0.15s" }}
+                       onMouseEnter={e => { e.currentTarget.style.background = "#f9fafb"; e.currentTarget.style.color = "#111827"; }}
+                       onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#4b5563"; }}
+                    >
+                      {d.label}
+                    </Link>
                 ))}
               </div>
             </div>
@@ -62,27 +66,21 @@ function NavDropdown({ item }: { item: NavItem }) {
 
 export default function Header() {
   return (
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "0 2.5rem", height: 60,
-        background: "rgba(244,246,250,0.88)", backdropFilter: "blur(12px)",
-        borderBottom: "1px solid rgba(212,218,232,0.6)",
-      }}>
-        <Link to="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-          <img src={logoSrc} alt="VectorWeave" style={{ height: 47, width: "auto" }} />
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 2.5rem", height: "60px", background: "rgba(255,255,255,0.9)", backdropFilter: "blur(8px)", borderBottom: "1px solid #e5e7eb" }}>
+        <Link to="/" style={{ display: "flex", alignItems: "center" }}>
+          <img src={logoSrc} alt="VectorWeave" style={{ height: "3rem", width: "auto" }} />
         </Link>
         <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
           {NAV.map(item => <NavDropdown key={item.label} item={item} />)}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <Link to="/auth" style={{ background: "none", border: "1.5px solid #d4dae8", color: "#4a5a78", padding: "0.4rem 1.1rem", borderRadius: 7, fontSize: "0.83rem", fontWeight: 500, textDecoration: "none", transition: "all 0.15s" }}
-             onMouseEnter={e => { e.currentTarget.style.borderColor = "#1d3461"; e.currentTarget.style.color = "#1d3461"; }}
-             onMouseLeave={e => { e.currentTarget.style.borderColor = "#d4dae8"; e.currentTarget.style.color = "#4a5a78"; }}
+          <Link to="/auth" style={{ padding: "0.375rem 1rem", border: "1px solid #d1d5db", color: "#4b5563", borderRadius: 8, fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", transition: "all 0.15s" }}
+             onMouseEnter={e => { e.currentTarget.style.borderColor = "#111827"; e.currentTarget.style.color = "#111827"; }}
+             onMouseLeave={e => { e.currentTarget.style.borderColor = "#d1d5db"; e.currentTarget.style.color = "#4b5563"; }}
           >Sign In</Link>
-          <Link to="/order" style={{ background: "#1d3461", border: "none", color: "#fff", padding: "0.45rem 1.25rem", borderRadius: 7, fontSize: "0.83rem", fontWeight: 600, textDecoration: "none", transition: "all 0.15s" }}
-             onMouseEnter={e => (e.currentTarget.style.background = "#3a5a99")}
-             onMouseLeave={e => (e.currentTarget.style.background = "#1d3461")}
+          <Link to="/order" style={{ padding: "0.375rem 1rem", background: "#111827", color: "#fff", borderRadius: 8, fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", transition: "all 0.15s" }}
+             onMouseEnter={e => e.currentTarget.style.background = "#374151"}
+             onMouseLeave={e => e.currentTarget.style.background = "#111827"}
           >Order Now</Link>
         </div>
       </nav>
