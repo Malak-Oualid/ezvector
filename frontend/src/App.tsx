@@ -1,5 +1,5 @@
-import  { Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import  { Suspense, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import AboutPage from "./pages/AboutPage";
@@ -27,10 +27,21 @@ import CustomBackboneConstructionPage from "./pages/CustomBackboneConstructionPa
 import DomainMutagenesisPage from "./pages/DomainMutagenesisPage";
 import { CartProvider } from "./context/CartContext";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <CartProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Suspense fallback={<div>Loading…</div>}>
           <Routes>
           <Route path="/" element={<LandingPage />} />

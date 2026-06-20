@@ -21,21 +21,17 @@ export default function CustomBackboneConstructionPage() {
       <div style={{ paddingTop: 60, minHeight: "100vh" }}>
         <Header />
         
-        <div style={{ textAlign: "center", padding: "4rem 2rem", background: "linear-gradient(to bottom right, rgba(239,246,255,0.5), rgba(219,234,254,0.5))", borderBottom: "1px solid #e5e7eb", marginBottom: "2rem", position: "relative", overflow: "hidden" }}>
-          <svg style={{ position: "absolute", top: "-50px", right: "-50px", width: "200px", height: "200px", opacity: 0.1 }} viewBox="0 0 100 100">
-            <rect x="20" y="20" width="60" height="60" fill="none" stroke="#3b82f6" strokeWidth="2" transform="rotate(45 50 50)" />
-            <rect x="30" y="30" width="40" height="40" fill="none" stroke="#16a34a" strokeWidth="2" transform="rotate(45 50 50)" />
-          </svg>
-          <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginBottom: "1rem", position: "relative", zIndex: 1 }}>
+        <div style={{ textAlign: "center", padding: "4rem 2rem", background: "linear-gradient(to bottom right, rgba(239,246,255,0.5), rgba(219,234,254,0.5))", borderBottom: "1px solid #e5e7eb", marginBottom: "2rem" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", marginBottom: "1rem" }}>
             <div style={{ width: "1rem", height: "1rem", borderRadius: "50%", background: "#3b82f6" }} title="Fragment 1" />
             <div style={{ width: "1rem", height: "1rem", borderRadius: "50%", background: "#16a34a" }} title="Fragment 2" />
             <div style={{ width: "1rem", height: "1rem", borderRadius: "50%", background: "#f97316" }} title="Fragment 3" />
             <div style={{ width: "1rem", height: "1rem", borderRadius: "50%", background: "#a855f7" }} title="Fragment 4" />
             <div style={{ width: "1rem", height: "1rem", borderRadius: "50%", background: "#14b8a6" }} title="Fragment 5" />
           </div>
-          <h1 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "2.6rem", letterSpacing: "-0.03em", color: "#1d3461", marginBottom: "0.75rem", position: "relative", zIndex: 1 }}>Custom Backbone Construction</h1>
-          <p style={{ color: "#4b5563", maxWidth: "36rem", margin: "0 auto", position: "relative", zIndex: 1 }}>Design and build entirely new plasmid backbones from scratch: combine any elements including markers, origins, promoters, and reporters to create the custom vector you've always wanted.</p>
-          <a href="/order" style={{ display: "inline-block", marginTop: "1.5rem", padding: "0.5rem 1.5rem", background: "#111827", color: "#fff", borderRadius: 8, fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", transition: "all 0.15s", position: "relative", zIndex: 1 }}
+          <h1 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "2.6rem", letterSpacing: "-0.03em", color: "#1d3461", marginBottom: "0.75rem" }}>Custom Backbone Construction</h1>
+          <p style={{ color: "#4b5563", maxWidth: "36rem", margin: "0 auto" }}>Design and build entirely new plasmid backbones from scratch: combine any elements including markers, origins, promoters, and reporters to create the custom vector you've always wanted.</p>
+          <a href="/order" style={{ display: "inline-block", marginTop: "1.5rem", padding: "0.5rem 1.5rem", background: "#111827", color: "#fff", borderRadius: 8, fontSize: "0.875rem", fontWeight: 500, textDecoration: "none", transition: "all 0.15s" }}
              onMouseEnter={e => { e.currentTarget.style.background = "#374151"; }}
              onMouseLeave={e => { e.currentTarget.style.background = "#111827"; }}
           >Order Now</a>
@@ -83,7 +79,7 @@ export default function CustomBackboneConstructionPage() {
               </div>
 
               <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: "2rem" }}>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#111827", marginBottom: "1.5rem" }}>Available Components</h3>
+                <h3 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.5rem", letterSpacing: "-0.02em", color: "#1d3461", marginBottom: "1.5rem" }}>Available Components</h3>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.5rem" }}>
                   <div>
                     <h4 style={{ fontWeight: 600, color: "#111827", marginBottom: "0.5rem" }}>Selectable Markers</h4>
@@ -109,7 +105,7 @@ export default function CustomBackboneConstructionPage() {
           {activeTab === "pricing" && (
             <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: 8, padding: "2rem" }}>
               <div style={{ borderBottom: "2px solid #111827", paddingBottom: "1rem", marginBottom: "1.5rem" }}>
-                <h2 style={{ fontSize: "1.5rem", fontWeight: 600, color: "#111827", marginBottom: "0.25rem" }}>Pricing Breakdown</h2>
+                <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "1.5rem", letterSpacing: "-0.02em", color: "#1d3461", marginBottom: "0.25rem" }}>Pricing Breakdown</h2>
                 <p style={{ fontSize: "0.75rem", color: "#6b7280", fontFamily: "DM Mono, monospace" }}>LAB-REPORT-PRICING-V1.0</p>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
