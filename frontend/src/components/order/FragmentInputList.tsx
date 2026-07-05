@@ -6,17 +6,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MAX_FRAGMENTS, type BuildOption } from "@/hooks/useOrderForm";
+import { MAX_FRAGMENTS, type BuildOption, type Fragment } from "@/hooks/useOrderForm";
+import { getFragmentColor } from "@/utils/chartData";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 type Props = {
   buildOption: BuildOption;
-  fragments: string[];
-  dnaTypes: string[];
+  fragments: Fragment[];
   fragmentErrors: string[];
-  onFragmentChange: (index: number, value: string) => void;
-  onDnaTypeChange: (index: number, value: string) => void;
+  onFragmentFieldChange: (index: number, field: keyof Fragment, value: string) => void;
   onDeleteFragment: (index: number, isRequired: boolean) => void;
   onAddFragment: () => void;
   requiredCount: number;
@@ -30,31 +29,26 @@ const DNA_TYPE_OPTIONS = [
   { value: "plasmid",   label: "Plasmid"   },
 ] as const;
 
-// ─── Shared styles ─────────────────────────────────────────────────────────────
-
-const inputStyle = (hasError: boolean): React.CSSProperties => ({
-  flex: 1,
-  background: "var(--color-surface)",
-  border: `1px solid ${hasError ? "var(--color-red)" : "var(--color-border)"}`,
-  borderRadius: 6,
-  padding: "0.5rem 0.75rem",
-  fontFamily: "var(--font-mono)",
-  fontSize: "0.82rem",
-  color: "var(--color-text)",
-  outline: "none",
-  transition: "border-color 0.15s, box-shadow 0.15s",
-  width: "100%",
-});
-
 // ─── Component ─────────────────────────────────────────────────────────────────
 
+/**
+ * Renders the list of fragment inputs for Multi-insert and New backbone builds.
+ *
+ * Each fragment row has:
+ * - A colored dot (matching the donut chart palette)
+ * - A name input (required, alphanumeric, max 50 chars — validated on submit)
+ * - A DNA type dropdown (Multi-insert only)
+ * - A textarea for the sequence (DM Mono, scrollable, ~3 rows)
+ * - A live bp count below the textarea
+ * - A trash button to clear/remove the row
+ *
+ * Purely presentational — all state lives in useOrderForm.
+ */
 const FragmentInputList = ({
   buildOption,
   fragments,
-  dnaTypes,
   fragmentErrors,
-  onFragmentChange,
-  onDnaTypeChange,
+  onFragmentFieldChange,
   onDeleteFragment,
   onAddFragment,
   requiredCount,
@@ -63,83 +57,78 @@ const FragmentInputList = ({
 
   return (
     <div style={{ display: "grid", gap: "1.25rem" }}>
-      {fragments.map((value, i) => {
+      {fragments.map((frag, i) => {
         const isRequired = i < requiredCount;
         const hasContent =
-          value.trim() !== "" || (showDnaType && dnaTypes[i]?.trim() !== "");
+          frag.name.trim() !== "" || frag.sequence.trim() !== "";
         const hasError = Boolean(fragmentErrors[i]);
+        const color = getFragmentColor(i);
+        const bpCount = frag.sequence.trim().length;
 
         return (
-          <div key={i} style={{ display: "grid", gap: "0.4rem" }}>
-            {/* Label row */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              {/* Step circle */}
+          <div
+            key={i}
+            style={{
+              background: "var(--color-surface)",
+              border: `1px solid ${hasError ? "var(--color-red)" : "var(--color-border)"}`,
+              borderRadius: 10,
+              overflow: "hidden",
+              transition: "border-color 0.15s",
+            }}
+          >
+            {/* ── Fragment header ──────────────────────────────────────── */}
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.6rem",
+              padding: "0.6rem 0.75rem",
+              borderBottom: `1px solid var(--color-border)`,
+              background: "var(--color-bg)",
+            }}>
+              {/* Color dot */}
               <div style={{
-                width: 22,
-                height: 22,
+                width: 10,
+                height: 10,
                 borderRadius: "50%",
-                background: "var(--color-navy)",
-                color: "#fff",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.7rem",
-                fontWeight: 700,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                background: color,
                 flexShrink: 0,
-              }}>
-                {i + 1}
-              </div>
-              <label style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "var(--color-text)",
-              }}>
-                Fragment {i + 1}
-                {isRequired && (
-                  <span style={{ color: "var(--color-red)", marginLeft: 2 }}>*</span>
-                )}
-              </label>
-            </div>
+              }} />
 
-            {/* Input row */}
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              {/* Fragment name input */}
               <input
                 type="text"
-                placeholder="Enter DNA sequence (5′ → 3′)"
-                value={value}
-                onChange={(e) => onFragmentChange(i, e.target.value)}
-                style={inputStyle(hasError)}
-                onFocus={(e) => {
-                  if (!hasError) {
-                    e.currentTarget.style.borderColor = "var(--color-blue-muted)";
-                    e.currentTarget.style.boxShadow = "0 0 0 3px rgba(91,127,181,0.15)";
-                  }
-                }}
-                onBlur={(e) => {
-                  if (!hasError) {
-                    e.currentTarget.style.borderColor = "var(--color-border)";
-                    e.currentTarget.style.boxShadow = "none";
-                  }
+                placeholder={`Fragment ${i + 1} name`}
+                value={frag.name}
+                onChange={(e) => onFragmentFieldChange(i, "name", e.target.value)}
+                style={{
+                  flex: 1,
+                  border: "none",
+                  background: "transparent",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "0.875rem",
+                  fontWeight: 600,
+                  color: "var(--color-text)",
+                  outline: "none",
+                  minWidth: 0,
                 }}
               />
 
               {/* DNA type dropdown — Multi-insert only */}
               {showDnaType && (
                 <Select
-                  value={dnaTypes[i] || ""}
-                  onValueChange={(val) => onDnaTypeChange(i, val)}
+                  value={frag.dnaType || ""}
+                  onValueChange={(val) => onFragmentFieldChange(i, "dnaType", val)}
                 >
                   <SelectTrigger style={{
-                    width: 140,
+                    width: 130,
                     background: "var(--color-surface)",
                     border: "1px solid var(--color-border)",
                     borderRadius: 6,
                     fontFamily: "var(--font-sans)",
-                    fontSize: "0.82rem",
-                    color: dnaTypes[i] ? "var(--color-text)" : "var(--color-text-subtle)",
+                    fontSize: "0.78rem",
+                    color: frag.dnaType ? "var(--color-text)" : "var(--color-text-subtle)",
                     flexShrink: 0,
+                    height: 30,
                   }}>
                     <SelectValue placeholder="DNA type" />
                   </SelectTrigger>
@@ -162,7 +151,7 @@ const FragmentInputList = ({
                   style={{
                     background: "none",
                     border: "none",
-                    padding: "0.25rem",
+                    padding: "0.2rem",
                     cursor: "pointer",
                     color: "var(--color-text-subtle)",
                     transition: "color 0.15s",
@@ -177,20 +166,58 @@ const FragmentInputList = ({
                     e.currentTarget.style.color = "var(--color-text-subtle)";
                   }}
                 >
-                  <Trash2 size={15} />
+                  <Trash2 size={14} />
                 </button>
               )}
             </div>
 
-            {/* Error */}
-            {hasError && (
+            {/* ── Sequence body ────────────────────────────────────────── */}
+            <div style={{ padding: "0.6rem 0.75rem" }}>
+              <textarea
+                rows={3}
+                placeholder="Enter DNA sequence (5′ → 3′) — A, C, G, T only"
+                value={frag.sequence}
+                onChange={(e) => onFragmentFieldChange(i, "sequence", e.target.value)}
+                style={{
+                  width: "100%",
+                  background: "transparent",
+                  border: "none",
+                  outline: "none",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.78rem",
+                  color: "var(--color-text)",
+                  lineHeight: 1.6,
+                  resize: "vertical",
+                  minHeight: 64,
+                }}
+              />
+
+              {/* bp count */}
               <p style={{
-                fontSize: "0.78rem",
-                color: "var(--color-red)",
-                fontFamily: "var(--font-sans)",
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.7rem",
+                color: "var(--color-text-subtle)",
+                marginTop: "0.2rem",
               }}>
-                {fragmentErrors[i]}
+                {bpCount > 0 ? `${bpCount} bp` : ""}
               </p>
+            </div>
+
+            {/* ── Error ────────────────────────────────────────────────── */}
+            {hasError && (
+              <div style={{
+                padding: "0.4rem 0.75rem",
+                borderTop: "1px solid var(--color-border)",
+                background: "#fef2f2",
+              }}>
+                <p style={{
+                  fontSize: "0.78rem",
+                  color: "var(--color-red)",
+                  fontFamily: "var(--font-sans)",
+                }}>
+                  {fragmentErrors[i]}
+                </p>
+              </div>
             )}
           </div>
         );

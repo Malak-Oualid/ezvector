@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Sidebar from "../components/Sidebar";
 import { useOrderForm, INITIAL_FRAGMENT_COUNT } from "@/hooks/useOrderForm";
 import BuildTypeSelector from "@/components/order/BuildTypeSelector";
 import BackboneSelector from "@/components/order/BackboneSelector";
@@ -18,9 +19,10 @@ const OrderPage: React.FC = () => {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", background: "var(--color-bg)" }}>
+      {form.loggedIn && <Sidebar />}
 
       <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <Header />
+        {!form.loggedIn && <Header />}
 
         <main style={{ flex: 1, maxWidth: 1200, width: "100%", margin: "0 auto", padding: "4rem 3rem" }}>
 
@@ -143,10 +145,8 @@ const OrderPage: React.FC = () => {
                     <FragmentInputList
                       buildOption={form.selectedOption}
                       fragments={form.fragments}
-                      dnaTypes={form.dnaTypes}
                       fragmentErrors={form.fragmentErrors}
-                      onFragmentChange={form.updateFragment}
-                      onDnaTypeChange={form.updateDnaType}
+                      onFragmentFieldChange={form.updateFragmentField}
                       onDeleteFragment={form.deleteFragment}
                       onAddFragment={form.addFragment}
                       requiredCount={INITIAL_FRAGMENT_COUNT[form.selectedOption]}

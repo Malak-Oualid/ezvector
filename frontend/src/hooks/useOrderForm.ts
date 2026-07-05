@@ -17,14 +17,12 @@ export const MAX_MUTATIONS = 4;
 
 const MUTATION_FORMAT = /^([ACGTacgt])(\d+)([ACGTacgt])$/i;
 
-/** Maps the selected build option to its API string. */
 const BUILD_TYPE_MAP = {
   0: "MULTI_INSERT",
   1: "MUTAGENESIS",
   2: "NEW_BACKBONE",
 } as const;
 
-/** Minimum number of fragments required before the user can add more. */
 export const INITIAL_FRAGMENT_COUNT: Record<0 | 1 | 2, number> = {
   0: 1,
   1: 1,
@@ -39,6 +37,14 @@ export type Backbone = {
   name: string;
   sequence: string;
 };
+
+export type Fragment = {
+  name: string;
+  sequence: string;
+  dnaType: string;
+};
+
+const emptyFragment = (): Fragment => ({ name: "", sequence: "", dnaType: "" });
 
 // ─── Hook ──────────────────────────────────────────────────────────────────────
 
@@ -69,7 +75,6 @@ export const useOrderForm = () => {
   const [selectedBackbone, setSelectedBackbone] = useState<string | null>(null);
   const [backboneSelectedError, setBackboneSelectedError] = useState("");
 
-  // Backbone paste form state
   const [newBackboneName, setNewBackboneName] = useState("");
   const [newBackboneSequence, setNewBackboneSequence] = useState("");
   const [backboneUploadError, setBackboneUploadError] = useState("");
@@ -106,61 +111,54 @@ export const useOrderForm = () => {
 
   // ── Fragments ─────────────────────────────────────────────────────────────
 
-  const [fragments, setFragments] = useState<string[]>(
-    Array(INITIAL_FRAGMENT_COUNT[0]).fill("")
-  );
-  const [dnaTypes, setDnaTypes] = useState<string[]>(
-    Array(INITIAL_FRAGMENT_COUNT[0]).fill("")
+  const [fragments, setFragments] = useState<Fragment[]>(
+    Array(INITIAL_FRAGMENT_COUNT[0]).fill(null).map(emptyFragment)
   );
   const [fragmentErrors, setFragmentErrors] = useState<string[]>([]);
 
-  const updateFragment = (index: number, value: string) => {
+  const updateFragmentField = (
+    index: number,
+    field: keyof Fragment,
+    value: string
+  ) => {
     setFragments((prev) => {
       const next = [...prev];
-      next[index] = value;
+      next[index] = { ...next[index], [field]: value };
       return next;
     });
 
-    const error =
-      value.trim() !== "" && !isValidDNA(value)
-        ? "Fragment can only contain A, C, G, or T."
-        : "";
+    // Inline sequence validation only — name validation is submit-only
+    if (field === "sequence") {
+      const error =
+        value.trim() !== "" && !isValidDNA(value)
+          ? "Fragment can only contain A, C, G, or T."
+          : "";
+      setFragmentErrors((prev) => {
+        const next = [...prev];
+        next[index] = error;
+        return next;
+      });
+    }
 
-    setFragmentErrors((prev) => {
-      const next = [...prev];
-      next[index] = error;
-      return next;
-    });
-  };
-
-  const updateDnaType = (index: number, value: string) => {
-    setDnaTypes((prev) => {
-      const next = [...prev];
-      next[index] = value;
-      return next;
-    });
-    setFragmentErrors((prev) => {
-      const next = [...prev];
-      next[index] = "";
-      return next;
-    });
+    // Clear error when DNA type is selected
+    if (field === "dnaType") {
+      setFragmentErrors((prev) => {
+        const next = [...prev];
+        next[index] = "";
+        return next;
+      });
+    }
   };
 
   const addFragment = () => {
     if (fragments.length >= MAX_FRAGMENTS) return;
-    setFragments((prev) => [...prev, ""]);
-    setDnaTypes((prev) => [...prev, ""]);
+    setFragments((prev) => [...prev, emptyFragment()]);
   };
 
   const deleteFragment = (index: number, isRequired: boolean) => {
     setFragments((prev) => {
       const next = [...prev];
-      isRequired ? (next[index] = "") : next.splice(index, 1);
-      return next;
-    });
-    setDnaTypes((prev) => {
-      const next = [...prev];
-      isRequired ? (next[index] = "") : next.splice(index, 1);
+      isRequired ? (next[index] = emptyFragment()) : next.splice(index, 1);
       return next;
     });
     setFragmentErrors((prev) => {
@@ -182,7 +180,6 @@ export const useOrderForm = () => {
       return next;
     });
 
-    // Only reject characters that can never be part of a valid mutation.
     const charError =
       value.trim() !== "" && !/^[ACGTacgt0-9]*$/.test(value)
         ? "Mutation can only contain A, C, G, T, and numbers."
@@ -216,24 +213,18 @@ export const useOrderForm = () => {
 
   // ── Build type switching ───────────────────────────────────────────────────
 
-  /**
-   * Resets all form fields and errors when the user picks a different build type.
-   * Keeps the backbone list and login state since those are not build-specific.
-   */
   const selectBuildOption = (option: BuildOption) => {
     if (option === selectedOption) return;
 
     setSelectedOption(option);
 
     const initialCount = INITIAL_FRAGMENT_COUNT[option];
-    setFragments(Array(initialCount).fill(""));
-    setDnaTypes(option === 0 ? Array(initialCount).fill("") : []);
+    setFragments(Array(initialCount).fill(null).map(emptyFragment));
     setMutations([""]);
     setMutationErrors([""]);
     setPlasmidName("");
     setSelectedBackbone(null);
 
-    // Clear all errors and mutagenesis-specific fields
     setFragmentErrors([]);
     setPlasmidError("");
     setSubmissionError("");
@@ -276,13 +267,28 @@ export const useOrderForm = () => {
     const errors: string[] = Array(fragments.length).fill("");
 
     fragments.forEach((frag, i) => {
-      const trimmed = frag.trim();
-      if (trimmed === "") {
-        if (selectedOption === 0 && dnaTypes[i]?.trim())
+      const trimmedSeq = frag.sequence.trim();
+      const trimmedName = frag.name.trim();
+
+      // Name validation — required, alphanumeric, max 50 chars
+      if (!trimmedName) {
+        errors[i] = "Fragment name is required.";
+        return;
+      } else if (trimmedName.length > 50) {
+        errors[i] = "Fragment name must be 50 characters or less.";
+        return;
+      } else if (!/^[a-zA-Z0-9]+$/.test(trimmedName)) {
+        errors[i] = "Fragment name can only contain letters and numbers.";
+        return;
+      }
+
+      // Sequence validation
+      if (trimmedSeq === "") {
+        if (selectedOption === 0 && frag.dnaType.trim())
           errors[i] = "Please enter a corresponding fragment sequence.";
-      } else if (!isValidDNA(trimmed)) {
+      } else if (!isValidDNA(trimmedSeq)) {
         errors[i] = "Fragment can only contain A, C, G, or T.";
-      } else if (selectedOption === 0 && !dnaTypes[i]) {
+      } else if (selectedOption === 0 && !frag.dnaType) {
         errors[i] = "Please select a DNA type.";
       }
     });
@@ -310,8 +316,7 @@ export const useOrderForm = () => {
   };
 
   const validateBackboneSelected = (): boolean => {
-    const error =
-      !selectedBackbone ? "Select or upload a backbone." : "";
+    const error = !selectedBackbone ? "Select or upload a backbone." : "";
     setBackboneSelectedError(error);
     return error !== "";
   };
@@ -320,24 +325,18 @@ export const useOrderForm = () => {
   const validateOrder = (): boolean => {
     const needsFragment = selectedOption === 0 || selectedOption === 2;
     const error =
-      needsFragment && !fragments.some((f) => f.trim() !== "")
+      needsFragment && !fragments.some((f) => f.sequence.trim() !== "")
         ? "Enter at least one fragment."
         : "";
     setSubmissionError(error);
     return error !== "";
   };
 
-  /** Returns true if there is an error. */
   // ── Target region ─────────────────────────────────────────────────────────
 
   const [targetRegion, setTargetRegion] = useState("");
   const [targetRegionError, setTargetRegionError] = useState("");
 
-  /**
-   * Validates the target mutation region.
-   * Checks: valid DNA + exists verbatim in the selected backbone.
-   * Returns true if there is an error.
-   */
   const validateTargetRegion = (sequence: string): boolean => {
     const trimmed = sequence.trim().toUpperCase();
     let error = "";
@@ -359,11 +358,6 @@ export const useOrderForm = () => {
     return error !== "";
   };
 
-  /**
-   * Updates target region and re-validates only if there is already
-   * an error — avoids firing "not found" on every keystroke.
-   * Full validation runs on blur and on submit.
-   */
   const updateTargetRegion = (value: string) => {
     setTargetRegion(value);
     if (targetRegionError) validateTargetRegion(value);
@@ -405,7 +399,6 @@ export const useOrderForm = () => {
       const position = parseInt(match[2], 10);
       const toBase = match[3].toUpperCase();
 
-      // Base-pair complement validity
       if (validPairs[fromBase] !== toBase) {
         setMutationSubmitError(
           `Mutation ${i + 1} is invalid: ${fromBase} can only mutate to ${validPairs[fromBase]}.`
@@ -413,7 +406,6 @@ export const useOrderForm = () => {
         return true;
       }
 
-      // Position within target region bounds
       if (position < 1 || position > targetLength) {
         setMutationSubmitError(
           `Mutation ${i + 1} position ${position} is outside the target region length (${targetLength} bp).`
@@ -421,7 +413,6 @@ export const useOrderForm = () => {
         return true;
       }
 
-      // Confirm "from" base actually exists at that position
       const actualBase = trimmedTarget[position - 1];
       if (actualBase !== fromBase) {
         setMutationSubmitError(
@@ -466,23 +457,23 @@ export const useOrderForm = () => {
 
   // ─── Cart + Order submission ───────────────────────────────────────────────
 
-  /** Shared data-prep used by both addToCart and submitOrder. */
   const buildOrderPayload = async (userId: string) => {
     const buildType = BUILD_TYPE_MAP[selectedOption];
 
     const totalPrice = computeTotalPrice(
       selectedOption,
-      fragments,
+      fragments.map((f) => f.sequence),
       mutations,
       selectedBackbone
     );
 
     const fragmentsData = fragments
-      .map((seq, idx) => ({
-        sequence: seq.trim(),
-        dnaType: dnaTypes[idx] || "SYNTHETIC",
-      }))
-      .filter((f) => f.sequence !== "");
+      .filter((f) => f.sequence.trim() !== "")
+      .map((f) => ({
+        name: f.name.trim(),
+        sequence: f.sequence.trim(),
+        dnaType: f.dnaType || "SYNTHETIC",
+      }));
 
     const mutationsData = mutations
       .map((m) => m.trim())
@@ -502,8 +493,7 @@ export const useOrderForm = () => {
 
   const resetFormAfterSuccess = () => {
     setPlasmidName("");
-    setFragments(Array(INITIAL_FRAGMENT_COUNT[selectedOption]).fill(""));
-    setDnaTypes(Array(INITIAL_FRAGMENT_COUNT[selectedOption]).fill(""));
+    setFragments(Array(INITIAL_FRAGMENT_COUNT[selectedOption]).fill(null).map(emptyFragment));
     setMutations([""]);
   };
 
@@ -542,32 +532,48 @@ export const useOrderForm = () => {
   const submitOrder = async () => {
     if (isSubmitting || !validateAll()) return;
 
-    if (!loggedIn) {
-      setOrderError("You must be logged in to place an order.");
-      return;
-    }
-
     setIsSubmitting(true);
     setOrderError("");
     setOrderSuccess(false);
 
     try {
-      const user = await getUser();
-      if (!user) throw new Error("Unable to get user information.");
+      const user = loggedIn ? await getUser() : null;
 
-      const payload = await buildOrderPayload(user.id);
-      const response = await orderService.createOrder(payload);
-
-      if (response.orderId) {
-        setOrderSuccess(true);
-        setTimeout(() => navigate("/orders"), 2000);
-      } else {
-        setOrderError(response.message || "Failed to create order.");
-      }
-    } catch (error: any) {
-      setOrderError(
-        error.response?.data?.message || error.message || "Failed to create order."
+      const buildType = BUILD_TYPE_MAP[selectedOption];
+      const totalPrice = computeTotalPrice(
+        selectedOption,
+        fragments.map((f) => f.sequence),
+        mutations,
+        selectedBackbone
       );
+
+      const fragmentsData = fragments
+        .filter((f) => f.sequence.trim() !== "")
+        .map((f) => ({
+          name: f.name.trim(),
+          sequence: f.sequence.trim(),
+          dnaType: f.dnaType || "SYNTHETIC",
+        }));
+
+      const mutationsData = mutations
+        .map((m) => m.trim())
+        .filter((m) => m !== "" && isValidMutation(m));
+
+      const orderData = {
+        plasmidName,
+        buildType,
+        backboneName: selectedBackbone,
+        fragments: fragmentsData,
+        mutations: mutationsData,
+        totalPrice,
+        ...(user && { supabaseUserId: user.id }),
+      };
+
+      // TODO: replace with actual checkout page once built
+      navigate("/checkout", { state: { order: orderData } });
+
+    } catch (error: any) {
+      setOrderError(error.message || "Failed to proceed to checkout.");
     } finally {
       setIsSubmitting(false);
     }
@@ -609,10 +615,8 @@ export const useOrderForm = () => {
 
     // Fragments
     fragments,
-    dnaTypes,
     fragmentErrors,
-    updateFragment,
-    updateDnaType,
+    updateFragmentField,
     addFragment,
     deleteFragment,
 

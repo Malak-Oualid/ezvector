@@ -194,14 +194,6 @@ const location = useLocation();
           {backbones.length === 0 && (
             <p style={{ fontSize: "0.78rem", color: "var(--color-text-subtle)", fontFamily: "var(--font-sans)" }}>
               No saved backbones yet.{" "}
-              <button
-                type="button"
-                onClick={() => setMode("paste")}
-                className="vw-link"
-                style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: "inherit" }}
-              >
-                Paste one now →
-              </button>
             </p>
           )}
 
@@ -215,7 +207,7 @@ const location = useLocation();
 
       {/* ── Paste mode ────────────────────────────────────────────────────── */}
       {mode === "paste" && (
-        <div style={{ display: "grid", gap: "0.75rem", maxWidth: 420 }}>
+        <div style={{ display: "grid", gap: "0.75rem" }}>
           {/* Name field */}
           <div>
             <label style={{
@@ -250,7 +242,7 @@ const location = useLocation();
             </label>
             <textarea
               rows={3}
-              placeholder="Paste complete plasmid sequence"
+              placeholder="Paste complete backbone sequence"
               value={newBackboneSequence}
               onChange={(e) => onNewBackboneSequenceChange(e.target.value)}
               style={{
@@ -268,16 +260,38 @@ const location = useLocation();
                 e.currentTarget.style.boxShadow = "none";
               }}
             />
-            <p style={{
-              fontSize: "0.72rem",
-              color: "var(--color-text-subtle)",
-              marginTop: "0.3rem",
-              fontFamily: "var(--font-mono)",
+            {newBackboneSequence.trim().length > 0 && (
+              <p style={{
+                fontSize: "0.72rem",
+                color: "var(--color-text-subtle)",
+                marginTop: "0.3rem",
+                fontFamily: "var(--font-mono)",
+              }}>
+                {`${newBackboneSequence.trim().length} bp`}
+              </p>
+            )}
+
+            {/* Persistent guidance — stays visible in Paste mode */}
+            <div style={{
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "0.4rem",
+              marginTop: "0.4rem",
+              background: "#fff7ed",
+              border: "1px solid #c2410c",
+              borderRadius: 6,
+              padding: "0.45rem 0.65rem",
+              fontFamily: "var(--font-sans)",
+              fontSize: "0.75rem",
+              lineHeight: 1.45,
+              color: "#c2410c",
             }}>
-              {newBackboneSequence.trim().length > 0
-                ? `${newBackboneSequence.trim().length} bp`
-                : "Only A, C, G, T characters accepted"}
-            </p>
+              <span style={{ flexShrink: 0 }}>⚠</span>
+              <span>
+                Paste the linear plasmid backbone. The 3′ end of the sequence
+                will connect to the 5′ end of the first fragment.
+              </span>
+            </div>
           </div>
 
           {backboneUploadError && (

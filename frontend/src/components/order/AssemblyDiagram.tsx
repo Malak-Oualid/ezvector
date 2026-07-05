@@ -1,12 +1,11 @@
 import { getFragmentColor } from "@/utils/chartData";
-import type { BuildOption } from "@/hooks/useOrderForm";
+import type { BuildOption, Fragment } from "@/hooks/useOrderForm";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
 type Props = {
   buildOption: BuildOption;
-  /** Raw fragment strings from form state. */
-  fragments: string[];
+  fragments: Fragment[];
 };
 
 type Segment = {
@@ -31,16 +30,16 @@ const JUNCTION_LABEL_Y = TRACK_Y + TRACK_H + 22;
 
 // ─── Segment builder ───────────────────────────────────────────────────────────
 
-const buildSegments = (buildOption: BuildOption, fragments: string[]): Segment[] => {
+const buildSegments = (buildOption: BuildOption, fragments: Fragment[]): Segment[] => {
   if (buildOption === 0) {
     // Multi-insert: backbone + one slot per non-empty fragment (min 1)
-    const filled = fragments.filter((f) => f.trim() !== "");
+    const filled = fragments.filter((f) => f.sequence.trim() !== "");
     const count = Math.max(1, filled.length);
 
     return [
       { label: "Backbone", color: BACKBONE_COLOR, isBackbone: true },
       ...Array.from({ length: count }, (_, i) => ({
-        label: `Fragment ${i + 1}`,
+        label: fragments[i]?.name.trim() || `Fragment ${i + 1}`,
         color: getFragmentColor(i),
         isBackbone: false,
       })),
@@ -51,7 +50,7 @@ const buildSegments = (buildOption: BuildOption, fragments: string[]): Segment[]
     // New backbone: no backbone chevron, min 2 fragment slots
     const count = Math.max(2, fragments.length);
     return Array.from({ length: count }, (_, i) => ({
-      label: `Fragment ${i + 1}`,
+      label: fragments[i]?.name.trim() || `Fragment ${i + 1}`,
       color: getFragmentColor(i),
       isBackbone: false,
     }));
@@ -86,6 +85,9 @@ const chevronPath = (x: number, w: number, isFirst: boolean, isLast: boolean): s
  * - Multi-insert: backbone + one chevron per non-empty fragment (min 1)
  * - New backbone: fragment chevrons only (min 2)
  * - Mutagenesis: renders nothing
+ *
+ * Labels show the fragment's user-entered name if set,
+ * otherwise falls back to "Fragment X".
  */
 const AssemblyDiagram = ({ buildOption, fragments }: Props) => {
   if (buildOption === 1) return null;
@@ -146,7 +148,26 @@ const AssemblyDiagram = ({ buildOption, fragments }: Props) => {
                   opacity="0.9"
                 />
 
-                
+                {/* Junction tick + label between segments */}
+                {i > 0 && (
+                  <>
+                    <line
+                      x1={x} y1={TRACK_Y - 3}
+                      x2={x} y2={TRACK_Y + TRACK_H + 3}
+                      stroke="#b8c3d8"
+                      strokeWidth="1.5"
+                    />
+                    <text
+                      x={x} y={JUNCTION_LABEL_Y}
+                      fill="#7a8ca8"
+                      fontSize="7.5"
+                      fontFamily="DM Mono, monospace"
+                      textAnchor="middle"
+                    >
+                      3′↔5′
+                    </text>
+                  </>
+                )}
 
                 {/* 5′ label */}
                 <text
@@ -189,7 +210,7 @@ const AssemblyDiagram = ({ buildOption, fragments }: Props) => {
             );
           })}
 
-          {/* Closing arc — bottom half of the circular plasmid */}
+          {/* Closing arc */}
           <path
             d={`M ${lastSegEndX} ${TRACK_Y + TRACK_H / 2} C ${lastSegEndX + 18} ${arcBottomY} ${START_X - 18} ${arcBottomY} ${START_X} ${TRACK_Y + TRACK_H / 2}`}
             stroke="#b8c3d8"
@@ -205,6 +226,19 @@ const AssemblyDiagram = ({ buildOption, fragments }: Props) => {
             fill="#7a8ca8"
             opacity="0.65"
           />
+
+          {/* Arc label */}
+          <text
+            x={(lastSegEndX + START_X) / 2}
+            y={arcBottomY + 11}
+            fill="#7a8ca8"
+            fontSize="8"
+            fontFamily="DM Sans, sans-serif"
+            textAnchor="middle"
+            fontStyle="italic"
+          >
+            ← bottom of plasmid (not submitted) →
+          </text>
         </svg>
       </div>
     </div>
