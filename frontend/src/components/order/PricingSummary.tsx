@@ -6,7 +6,6 @@ import {
   buildMutagenesisChart,
   buildSkeletonChart,
   getFragmentColor,
-  getMutationColor,
   type ChartSegment,
 } from "@/utils/chartData";
 import {
@@ -146,17 +145,12 @@ const PlasmidChart = ({ segments }: { segments: ChartSegment[] }) => (
 
 const SequenceDisplay = ({
   parts,
-  buildOption,
 }: {
   parts: (SequencePart | SequencePartWithMutations)[];
   buildOption: BuildOption;
 }) => {
   const fullSequence = parts.map((p) => p.sequence).join("").toUpperCase();
   const totalBp = fullSequence.length;
-  const firstPart = parts[0];
-  const hasMutations =
-    "mutations" in firstPart &&
-    (firstPart as SequencePartWithMutations).mutations.length > 0;
 
   return (
     <div style={{ marginTop: "1.25rem" }}>
@@ -249,10 +243,6 @@ const SequenceDisplay = ({
 };
 
 // ─── PricingTable ──────────────────────────────────────────────────────────────
-
-const rowStyle: React.CSSProperties = {
-  display: "contents",
-};
 
 const cellStyle: React.CSSProperties = {
   fontFamily: "var(--font-sans)",

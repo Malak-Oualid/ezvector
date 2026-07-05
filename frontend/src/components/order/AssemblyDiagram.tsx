@@ -27,7 +27,6 @@ const ARROW_W = 10;
 const START_X = 14;
 const NAME_LABEL_Y = TRACK_Y - 9;
 const PRIME_LABEL_Y = TRACK_Y + TRACK_H + 11;
-const JUNCTION_LABEL_Y = TRACK_Y + TRACK_H + 22;
 
 // ─── Segment builder ───────────────────────────────────────────────────────────
 
