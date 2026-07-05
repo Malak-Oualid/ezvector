@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { getUser } from "../lib/auth";
+import Header from "../components/Header";
 
 export default function AccountPage() {
   const [user, setUser] = useState<any>(null);
@@ -49,10 +50,20 @@ export default function AccountPage() {
   // };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      <Sidebar />
-      
-      <main className="flex-1 p-8">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Fixed header across the top */}
+      <Header />
+      {/* Spacer so content doesn't hide under fixed header */}
+      <div style={{ height: "var(--header-height)" }} />
+
+      {/* Sidebar + main content side by side below header */}
+      <div className="flex flex-1">
+        <Sidebar />
+        <main className="flex-1 container mx-auto px-4 py-12">
+
+
+
+
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
@@ -119,7 +130,11 @@ export default function AccountPage() {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+
+ </main>
+      </div>
+    </div >
+
+
   );
 }

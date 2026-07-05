@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/lib/supabase";
+import { useLocation } from "react-router-dom";
 
 const AuthPage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const AuthPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const location = useLocation();
+  const from = location.state?.from || "/profile";
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -49,8 +52,8 @@ const AuthPage: React.FC = () => {
 
       if (data.user) {
         // Supabase automatically stores the session
-        // Redirect to profile page
-        navigate("/profile");
+        // Redirect to page where you came from
+        navigate(from);
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");
@@ -118,7 +121,8 @@ const AuthPage: React.FC = () => {
             }),
           });
 
-          const customerData = await backendResponse.json();
+          const text = await backendResponse.text();
+          const customerData = text ? JSON.parse(text) : {};
 
           if (!backendResponse.ok) {
             console.error("Failed to create customer in backend:", customerData.message);
@@ -128,8 +132,8 @@ const AuthPage: React.FC = () => {
           }
 
           console.log("Customer created successfully:", customerData);
-          // Redirect to profile page
-          navigate("/profile");
+          // Redirect to page where you came from
+          navigate(from);
         } catch (backendError) {
           console.error("Backend error:", backendError);
           const errorMsg = backendError instanceof Error ? backendError.message : 'Unknown error';
@@ -153,8 +157,8 @@ const AuthPage: React.FC = () => {
           <CardHeader>
             <CardTitle className="text-2xl text-center">Welcome to VectorWeave</CardTitle>
             <CardDescription className="text-center">
-              {activeTab === "signin" 
-                ? "Sign in to your account to continue" 
+              {activeTab === "signin"
+                ? "Sign in to your account to continue"
                 : "Create a new account to get started"}
             </CardDescription>
           </CardHeader>
@@ -166,7 +170,7 @@ const AuthPage: React.FC = () => {
               </div>
             )}
 
-        
+
 
             {/* Sign In Form */}
             {activeTab === "signin" && (

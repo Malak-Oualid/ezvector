@@ -9,6 +9,7 @@ import { stripeService } from '@/services/stripeService';
 import { getUser, isAuthenticated } from '@/lib/auth';
 import { Trash2, ShoppingCart, CreditCard } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import Header from '@/components/Header';
 
 export default function CartPage() {
   const [cart, setCart] = useState<CartData | null>(null);
@@ -72,7 +73,7 @@ export default function CartPage() {
 
   const clearCart = async () => {
     if (!confirm('Are you sure you want to clear your cart?')) return;
-    
+
     setError('');
     try {
       const user = await getUser();
@@ -109,7 +110,7 @@ export default function CartPage() {
           successUrl: `${baseUrl}/order/success?session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${baseUrl}/order/cancel`
         });
-        
+
         // Redirect to Stripe checkout page
         window.location.href = checkoutSession.url;
         return;
@@ -117,7 +118,7 @@ export default function CartPage() {
 
       // Direct checkout - use backend checkout endpoint
       const orderResponses = await cartService.checkout(user.id);
-      
+
       const failedOrders = orderResponses.filter((r: any) => !r.orderId);
 
       if (failedOrders.length > 0) {
@@ -143,11 +144,18 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Fixed header across the top */}
+      <Header />
+      {/* Spacer so content doesn't hide under fixed header */}
+      <div style={{ height: "var(--header-height)" }} />
+
+      {/* Sidebar + main content side by side below header */}
+      <div className="flex flex-1">
+        <Sidebar />
         <main className="flex-1 container mx-auto px-4 py-12">
+
+
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h1 className="text-4xl font-bold flex items-center gap-3">
@@ -213,7 +221,7 @@ export default function CartPage() {
                               Added {new Date(item.addedAt).toLocaleDateString()}
                             </div>
                           </div>
-                          
+
                           <div className="flex items-center gap-4">
                             <div className="text-right">
                               <div className="text-2xl font-bold text-green-600">
@@ -257,7 +265,7 @@ export default function CartPage() {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between mb-4">
                       <div>
                         <div className="text-sm text-gray-600">
@@ -281,8 +289,10 @@ export default function CartPage() {
               </>
             )}
           </div>
+
         </main>
       </div>
-    </div>
+    </div >
+
   );
 }

@@ -2,7 +2,7 @@ import {
   MULTI_INSERT_PRICING,
   MULTI_MUTAGENESIS_PRICING,
   OWN_BACKBONE_PRICING,
-} from "@/config/pricing";
+} from "@/config/pricingconfig";
 
 // ─── Shared helpers ────────────────────────────────────────────────────────────
 

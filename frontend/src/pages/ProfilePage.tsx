@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 import { Button } from "../components/ui/button";
 import { getUser } from "../lib/auth";
 import Sidebar from "../components/Sidebar";
+import Header from "../components/Header";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -48,10 +49,19 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      <Sidebar />
-      
-      <main className="flex-1 p-8">
+  <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Fixed header across the top */}
+      <Header />
+      {/* Spacer so content doesn't hide under fixed header */}
+      <div style={{ height: "var(--header-height)" }} />
+
+      {/* Sidebar + main content side by side below header */}
+      <div className="flex flex-1">
+        <Sidebar />
+        <main className="flex-1 container mx-auto px-4 py-12">
+
+
+
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -109,7 +119,11 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+
+
         </main>
       </div>
+    </div >
+
     );
   }
