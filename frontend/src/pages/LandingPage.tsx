@@ -4,17 +4,9 @@ import Footer from "../components/Footer";
 import { useState } from "react";
 
 /* ── Types ─────────────────────────────────────────── */
-interface StepItem { n: string; title: string; body: string; }
 interface CompareRow { feat: string; us: string; vendors: string; diy: string; }
 
 /* ── Data ───────────────────────────────────────────── */
-
-const STEPS: StepItem[] = [
-  { n: "1", title: "Place your Order", body: "Upload your plasmid design online. Pay with credit card or PO and receive your submission instructions." },
-  { n: "2", title: "Prepare Samples", body: "Prepare your DNA fragments for submission following our simple sample prep guide." },
-  { n: "3", title: "Submit Samples", body: "Place your samples in a dropbox or mail them directly to us. No complicated shipping." },
-  { n: "4", title: "Receive your Plasmid", body: "We'll send your sequence-verified plasmid, ready to use in your experiments." },
-];
 
 const COMPARE_ROWS: CompareRow[] = [
   { feat: "Vector Flexibility", us: "Clone into any plasmid. No vendor lock-in.", vendors: "Restricted to vendor-approved backbones.", diy: "Requires manual prep and compatibility work." },
@@ -24,43 +16,64 @@ const COMPARE_ROWS: CompareRow[] = [
   { feat: "Total Cost", us: "Predictable and affordable. No hidden fees.", vendors: "High costs for long or complex builds.", diy: "High reagent, labor, and re-do costs." },
 ];
 
-/* ── Plasmid SVG ────────────────────────────────────── */
-function PlasmidSVG() {
-  const [deg, setDeg] = useState(0);
-  const [spinning, setSpinning] = useState(false);
-
-  function handleHover() {
-    if (spinning) return;
-    setSpinning(true);
-    setDeg(d => d + 360);
-    setTimeout(() => setSpinning(false), 900);
-  }
+/* ── DNA Weaving SVG ────────────────────────────────────── */
+function DNAWeaveSVG() {
+  const [hover, setHover] = useState(false);
 
   return (
       <svg
           viewBox="-150 -150 300 300"
           xmlns="http://www.w3.org/2000/svg"
           style={{ display: "block", width: 280, height: 280, cursor: "pointer" }}
-          onMouseEnter={handleHover}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
       >
-        <g style={{ transform: `rotate(${deg}deg)`, transformOrigin: "0px 0px", transition: spinning ? "transform 0.9s cubic-bezier(0.4,0,0.2,1)" : "none" }}>
-          <circle cx="0" cy="0" r="110" fill="none" stroke="#e8ecf4" strokeWidth="18" />
-          <path fill="none" stroke="#5b7fb5" strokeWidth="18" strokeLinecap="round" d="M 0 -110 A 110 110 0 0 1 95.26 -55" />
-          <path fill="none" stroke="#1a7a4a" strokeWidth="18" strokeLinecap="round" d="M 95.26 -55 A 110 110 0 0 1 95.26 55" />
-          <path fill="none" stroke="#d94f2b" strokeWidth="18" strokeLinecap="round" d="M 95.26 55 A 110 110 0 0 1 0 110" />
-          <path fill="none" stroke="#7c5cbf" strokeWidth="18" strokeLinecap="round" d="M 0 110 A 110 110 0 0 1 -95.26 55" />
-          <path fill="none" stroke="#2a8a9a" strokeWidth="18" strokeLinecap="round" d="M -95.26 55 A 110 110 0 0 1 -95.26 -55" />
-          <path fill="none" stroke="#c0392b" strokeWidth="18" strokeLinecap="round" d="M -95.26 -55 A 110 110 0 0 1 0 -110" />
-          <circle cx="0" cy="0" r="85" fill="none" stroke="#eef1f7" strokeWidth="8" />
-          <path fill="none" stroke="#b8c3d8" strokeWidth="2.5" strokeDasharray="4,6" d="M 0,-85 A 85,85 0 1,1 -0.1,-85" />
-          <text x="0" y="-60" textAnchor="middle" fontFamily="DM Mono, monospace" fontSize="8" fill="#4a5a78" fontWeight="500">pUC19</text>
-          <text x="0" y="-48" textAnchor="middle" fontFamily="DM Mono, monospace" fontSize="6.5" fill="#7a8ca8">2686 bp</text>
-          <g stroke="#5b7fb5" strokeWidth="1.5">
-            {[0, 72, 144, 216, 288].map(d => (
-                <line key={d} x1="85" y1="0" x2="100" y2="0" transform={`rotate(${d})`} />
-            ))}
+        {/* Background threads */}
+        <g opacity="0.3">
+          {[-120, -80, -40, 0, 40, 80, 120].map((y, i) => (
+            <line key={i} x1="-140" y1={y} x2="140" y2={y} stroke="#d4dae8" strokeWidth="1.5" />
+          ))}
+          {[-120, -80, -40, 0, 40, 80, 120].map((x, i) => (
+            <line key={i} x1={x} y1="-140" x2={x} y2="140" stroke="#d4dae8" strokeWidth="1.5" />
+          ))}
+        </g>
+
+        {/* DNA double helix weaving pattern */}
+        <g style={{ transition: "transform 0.5s ease", transform: hover ? "scale(1.05)" : "scale(1)" }}>
+          {/* Left strand */}
+          <path d="M -60 -100 Q -30 -50 -60 0 T -60 100" fill="none" stroke="#5b7fb5" strokeWidth="4" strokeLinecap="round" />
+          {/* Right strand */}
+          <path d="M 60 -100 Q 30 -50 60 0 T 60 100" fill="none" stroke="#1a7a4a" strokeWidth="4" strokeLinecap="round" />
+
+          {/* Cross-links (weaving) */}
+          {[-80, -40, 0, 40, 80].map((y, i) => {
+            const offset = i % 2 === 0 ? 0 : 15;
+            return (
+              <g key={i}>
+                <line x1="-60" y1={y} x2="60" y2={y} stroke="#d94f2b" strokeWidth="2" opacity="0.6" />
+                <circle cx={-30 + offset} cy={y} r="4" fill="#d94f2b" />
+                <circle cx={30 - offset} cy={y} r="4" fill="#d94f2b" />
+              </g>
+            );
+          })}
+
+          {/* Embroidery needle */}
+          <g transform={hover ? "translate(10, -10)" : "translate(0, 0)"} style={{ transition: "transform 0.3s ease" }}>
+            <path d="M 80 -80 L 100 -60 L 95 -55 L 75 -75 Z" fill="#8fa8d0" />
+            <line x1="80" y1="-80" x2="60" y2="-100" stroke="#8fa8d0" strokeWidth="2" />
+            <circle cx="80" cy="-80" r="3" fill="#1d3461" />
           </g>
-          <circle cx="0" cy="0" r="126" fill="none" stroke="#1d3461" strokeWidth="1" strokeDasharray="2,3" opacity="0.4" />
+
+          {/* Thread from needle */}
+          <path d="M 60 -100 Q 40 -80 20 -60 T -20 -20" fill="none" stroke="#d94f2b" strokeWidth="1.5" strokeDasharray="4,4" opacity={hover ? 0.8 : 0.4} />
+        </g>
+
+        {/* Decorative corners */}
+        <g opacity="0.4">
+          <path d="M -130 -130 L -130 -110 L -110 -110" fill="none" stroke="#1d3461" strokeWidth="2" />
+          <path d="M 130 -130 L 130 -110 L 110 -110" fill="none" stroke="#1d3461" strokeWidth="2" />
+          <path d="M -130 130 L -130 110 L -110 110" fill="none" stroke="#1d3461" strokeWidth="2" />
+          <path d="M 130 130 L 130 110 L 110 110" fill="none" stroke="#1d3461" strokeWidth="2" />
         </g>
       </svg>
   );
@@ -130,11 +143,11 @@ export default function LandingPage() {
                 Multi-insert cloning, multi-site mutagenesis, and custom plasmid backbones — all delivered in days. Send your DNA and we'll do the rest.
               </p>
               <div className="anim-4" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                <a href="#" style={{ background: "#d94f2b", color: "#fff", border: "none", padding: "0.85rem 2.2rem", borderRadius: 8, fontSize: "1rem", fontWeight: 600, textDecoration: "none", transition: "all 0.18s", display: "inline-block" }}
+                <a href="/order" style={{ background: "#d94f2b", color: "#fff", border: "none", padding: "0.85rem 2.2rem", borderRadius: 8, fontSize: "1rem", fontWeight: 600, textDecoration: "none", transition: "all 0.18s", display: "inline-block" }}
                    onMouseEnter={e => { e.currentTarget.style.background = "#b84020"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(217,79,43,0.3)"; }}
                    onMouseLeave={e => { e.currentTarget.style.background = "#d94f2b"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
                 >Start Cloning</a>
-                <a href="/order" style={{ color: "#1d3461", fontSize: "0.9rem", fontWeight: 500, textDecoration: "none", borderBottom: "1px solid transparent", transition: "border-color 0.15s" }}
+                <a href="/services" style={{ color: "#1d3461", fontSize: "0.9rem", fontWeight: 500, textDecoration: "none", borderBottom: "1px solid transparent", transition: "border-color 0.15s" }}
                    onMouseEnter={e => (e.currentTarget.style.borderBottomColor = "#1d3461")}
                    onMouseLeave={e => (e.currentTarget.style.borderBottomColor = "transparent")}
                 >See our services →</a>
@@ -142,7 +155,7 @@ export default function LandingPage() {
             </div>
             <div className="anim-5" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ background: "rgba(255,255,255,0.75)", backdropFilter: "blur(8px)", borderRadius: 20, padding: "2.5rem", border: "1px solid rgba(212,218,232,0.7)", boxShadow: "0 12px 48px rgba(29,52,97,0.1)" }}>
-                <PlasmidSVG />
+                <DNAWeaveSVG />
               </div>
             </div>
           </div>
@@ -168,40 +181,49 @@ export default function LandingPage() {
                   title: "Synthetic Inserts",
                   icon: <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block", margin: "0 auto 1rem" }}>
                     <circle cx="40" cy="40" r="32" fill="none" stroke="#d4dae8" strokeWidth="6"/>
-                    <path d="M 33 10.5 A 32 32 0 0 1 47 10.5" fill="none" stroke="#d94f2b" strokeWidth="6"/>
+                    <path d="M 40 8 A 32 32 0 0 1 72 40" fill="none" stroke="#d94f2b" strokeWidth="6" strokeLinecap="round"/>
                   </svg>,
+                  link: "/services/synthetic-dna-cloning",
                 },
                 {
                   title: "Multi-Insert Cloning",
                   icon: <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block", margin: "0 auto 1rem" }}>
                     <circle cx="40" cy="40" r="32" fill="none" stroke="#d4dae8" strokeWidth="6"/>
-                    <path d="M 30 12 A 32 32 0 0 1 38.5 8.2" fill="none" stroke="#d94f2b" strokeWidth="6"/>
-                    <path d="M 38.5 8.2 A 32 32 0 0 1 50 12" fill="none" stroke="#5b7fb5" strokeWidth="6"/>
-                    <path d="M 50 12 A 32 32 0 0 1 58 21" fill="none" stroke="#1a7a4a" strokeWidth="6"/>
+                    <path d="M 40 8 A 32 32 0 0 1 72 40" fill="none" stroke="#d94f2b" strokeWidth="6" strokeLinecap="round"/>
+                    <path d="M 72 40 A 32 32 0 0 1 40 72" fill="none" stroke="#5b7fb5" strokeWidth="6" strokeLinecap="round"/>
+                    <path d="M 40 72 A 32 32 0 0 1 8 40" fill="none" stroke="#1a7a4a" strokeWidth="6" strokeLinecap="round"/>
                   </svg>,
+                  link: "/services/multi-insert-cloning",
                 },
                 {
                   title: "Build New Plasmid Backbones",
                   icon: <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block", margin: "0 auto 1rem" }}>
-                    <path d="M 40 8 A 32 32 0 0 1 72 40" fill="none" stroke="#1d3461" strokeWidth="6"/>
-                    <path d="M 72 40 A 32 32 0 0 1 40 72" fill="none" stroke="#5b7fb5" strokeWidth="6"/>
-                    <path d="M 40 72 A 32 32 0 0 1 8 40" fill="none" stroke="#d94f2b" strokeWidth="6"/>
-                    <path d="M 8 40 A 32 32 0 0 1 40 8" fill="none" stroke="#f1c40f" strokeWidth="6"/>
+                    <circle cx="40" cy="40" r="32" fill="none" stroke="#d4dae8" strokeWidth="6"/>
+                    <path d="M 40 8 A 32 32 0 0 1 72 40" fill="none" stroke="#1d3461" strokeWidth="6" strokeLinecap="round"/>
+                    <path d="M 72 40 A 32 32 0 0 1 40 72" fill="none" stroke="#5b7fb5" strokeWidth="6" strokeLinecap="round"/>
+                    <path d="M 40 72 A 32 32 0 0 1 8 40" fill="none" stroke="#d94f2b" strokeWidth="6" strokeLinecap="round"/>
+                    <path d="M 8 40 A 32 32 0 0 1 40 8" fill="none" stroke="#f1c40f" strokeWidth="6" strokeLinecap="round"/>
                   </svg>,
+                  link: "/services/custom-backbone-construction",
                 },
                 {
                   title: "Multi-Site Mutagenesis",
                   icon: <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block", margin: "0 auto 1rem" }}>
                     <circle cx="40" cy="40" r="32" fill="none" stroke="#d4dae8" strokeWidth="6"/>
-                    <path d="M 40 8 l 2 6 l 6 0 l -5 4 l 2 6 l -5 -4 l -5 4 l 2 -6 l -5 -4 l 6 0 Z" fill="#d94f2b"/>
-                    <path d="M 72 40 l 2 6 l 6 0 l -5 4 l 2 6 l -5 -4 l -5 4 l 2 -6 l -5 -4 l 6 0 Z" fill="#5b7fb5"/>
-                    <path d="M 16 60 l 2 6 l 6 0 l -5 4 l 2 6 l -5 -4 l -5 4 l 2 -6 l -5 -4 l 6 0 Z" fill="#1a7a4a"/>
+                    <path d="M 40 8 l 2.5 7.5 l 7.5 0 l -6 4.5 l 2.5 7.5 l -6.5 -4.5 l -6.5 4.5 l 2.5 -7.5 l -6 -4.5 l 7.5 0 Z" fill="#d94f2b"/>
+                    <path d="M 72 40 l 2.5 7.5 l 7.5 0 l -6 4.5 l 2.5 7.5 l -6.5 -4.5 l -6.5 4.5 l 2.5 -7.5 l -6 -4.5 l 7.5 0 Z" fill="#5b7fb5"/>
+                    <path d="M 16 60 l 2.5 7.5 l 7.5 0 l -6 4.5 l 2.5 7.5 l -6.5 -4.5 l -6.5 4.5 l 2.5 -7.5 l -6 -4.5 l 7.5 0 Z" fill="#1a7a4a"/>
                   </svg>,
+                  link: "/services/multi-site-mutagenesis",
                 },
               ].map(item => (
                   <div key={item.title} className="value-card" style={{ background: "#fff", border: "1px solid #d4dae8", borderRadius: 14, padding: "2rem 1.5rem", textAlign: "center", transition: "all 0.2s" }}>
                     {item.icon}
-                    <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#1a2236" }}>{item.title}</h3>
+                    <h3 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#1a2236", marginBottom: "0.5rem" }}>{item.title}</h3>
+                    <a href={item.link} style={{ color: "#5b7fb5", fontSize: "0.8rem", textDecoration: "none", borderBottom: "1px solid transparent", transition: "border-color 0.15s" }}
+                       onMouseEnter={e => e.currentTarget.style.borderBottomColor = "#5b7fb5"}
+                       onMouseLeave={e => e.currentTarget.style.borderBottomColor = "transparent"}
+                    >Learn more →</a>
                   </div>
               ))}
             </div>
@@ -212,15 +234,104 @@ export default function LandingPage() {
             <div style={{ maxWidth: 1100, margin: "0 auto" }}>
               <p style={{ fontSize: "0.75rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.14em", color: "#5b7fb5", marginBottom: "0.75rem", textAlign: "center" }}>How It Works</p>
               <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "2.6rem", letterSpacing: "-0.03em", color: "#1d3461", marginBottom: "3.5rem", textAlign: "center" }}>Your new cloning workflow.</h2>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem", position: "relative" }}>
-                <div style={{ position: "absolute", top: "calc(1.5rem + 28px)", left: "calc(12.5% + 28px)", right: "calc(12.5% + 28px)", height: 1, background: "linear-gradient(90deg, #d4dae8, #8fa8d0, #d4dae8)", zIndex: 0 }} />
-                {STEPS.map(s => (
-                    <div key={s.n} style={{ position: "relative", zIndex: 1, textAlign: "center", padding: "1.5rem 1rem" }}>
-                      <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#1d3461", color: "#fff", fontFamily: "'Fraunces', serif", fontSize: "1.4rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem", boxShadow: "0 4px 16px rgba(29,52,97,0.25)" }}>{s.n}</div>
-                      <h4 style={{ fontSize: "0.95rem", fontWeight: 600, color: "#1a2236", marginBottom: "0.5rem" }}>{s.title}</h4>
-                      <p style={{ fontSize: "0.82rem", color: "#4a5a78", lineHeight: 1.6 }}>{s.body}</p>
+              
+              <div style={{ position: "relative", padding: "2rem 0" }}>
+                {/* Serpentine Path SVG */}
+                <svg viewBox="0 0 400 600" style={{ position: "absolute", left: "50%", top: 0, transform: "translateX(-50%)", width: "100%", height: "600px", pointerEvents: "none", zIndex: 0 }} preserveAspectRatio="none">
+                  <path d="M 200 0 Q 350 100 350 200 Q 350 300 200 300 Q 50 300 50 400 Q 50 500 200 500 Q 350 500 350 600" fill="none" stroke="#d4dae8" strokeWidth="8" strokeLinecap="round"/>
+                </svg>
+
+                {/* Steps */}
+                <div style={{ position: "relative", zIndex: 1 }}>
+                  {/* Step 1: Place your Order - Icon Right, Text Left */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8rem", padding: "0 2rem" }}>
+                    <div style={{ flex: 1, paddingRight: "3rem", textAlign: "right" }}>
+                      <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#1d3461", marginBottom: "0.5rem" }}>Place your Order</h3>
+                      <p style={{ fontSize: "0.9rem", color: "#4a5a78", lineHeight: 1.6 }}>Upload your plasmid design online. Pay with a credit card or PO and get your submission instructions.</p>
                     </div>
-                ))}
+                    <div style={{ flex: 0, paddingLeft: "3rem" }}>
+                      <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block" }}>
+                        {/* Monitor outline */}
+                        <rect x="10" y="15" width="60" height="40" rx="3" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        <rect x="30" y="55" width="20" height="5" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        <rect x="25" y="60" width="30" height="3" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        {/* Colorful circular loading graphic */}
+                        <circle cx="40" cy="35" r="12" fill="none" stroke="#d94f2b" strokeWidth="2" strokeDasharray="4,2"/>
+                        <circle cx="40" cy="35" r="8" fill="none" stroke="#5b7fb5" strokeWidth="2" strokeDasharray="3,2"/>
+                        <circle cx="40" cy="35" r="4" fill="#1a7a4a"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Step 2: Prepare samples - Icon Left, Text Right */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8rem", padding: "0 2rem" }}>
+                    <div style={{ flex: 0, paddingRight: "3rem" }}>
+                      <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block" }}>
+                        {/* Test tube rack outline */}
+                        <rect x="15" y="20" width="50" height="45" rx="2" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        <line x1="15" y1="35" x2="65" y2="35" stroke="#1d3461" strokeWidth="2"/>
+                        {/* 8 test tubes */}
+                        {[1,2,3,4,5,6,7,8].map((i) => (
+                          <g key={i}>
+                            <rect x={18 + (i-1) * 6} y="22" width="4" height="12" rx="1" stroke="#1d3461" strokeWidth="1.5" fill="none"/>
+                            <circle cx={20 + (i-1) * 6} cy="18" r="2" fill="#1d3461"/>
+                          </g>
+                        ))}
+                      </svg>
+                    </div>
+                    <div style={{ flex: 1, paddingLeft: "3rem", textAlign: "left" }}>
+                      <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#1d3461", marginBottom: "0.5rem" }}>Prepare samples</h3>
+                      <p style={{ fontSize: "0.9rem", color: "#4a5a78", lineHeight: 1.6 }}>Prepare your DNA fragments for submission.</p>
+                    </div>
+                  </div>
+
+                  {/* Step 3: Submit your samples - Icon Right, Text Left */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8rem", padding: "0 2rem" }}>
+                    <div style={{ flex: 1, paddingRight: "3rem", textAlign: "right" }}>
+                      <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#1d3461", marginBottom: "0.5rem" }}>Submit your samples</h3>
+                      <p style={{ fontSize: "0.9rem", color: "#4a5a78", lineHeight: 1.6 }}>Place your samples in a dropbox or mail them to us.</p>
+                    </div>
+                    <div style={{ flex: 0, paddingLeft: "3rem" }}>
+                      <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block" }}>
+                        {/* 3D cardboard box outline */}
+                        <rect x="20" y="25" width="40" height="35" rx="2" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        <line x1="20" y1="35" x2="60" y2="35" stroke="#1d3461" strokeWidth="2"/>
+                        <line x1="40" y1="25" x2="40" y2="60" stroke="#1d3461" strokeWidth="2"/>
+                        <line x1="20" y1="25" x2="30" y2="15" stroke="#1d3461" strokeWidth="2"/>
+                        <line x1="60" y1="25" x2="70" y2="15" stroke="#1d3461" strokeWidth="2"/>
+                        <line x1="30" y1="15" x2="70" y2="15" stroke="#1d3461" strokeWidth="2"/>
+                        <line x1="30" y1="15" x2="30" y2="35" stroke="#1d3461" strokeWidth="2"/>
+                        <line x1="70" y1="15" x2="70" y2="35" stroke="#1d3461" strokeWidth="2"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Step 4: Receive your plasmid - Icon Left, Text Right */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 2rem" }}>
+                    <div style={{ flex: 0, paddingRight: "3rem" }}>
+                      <svg viewBox="0 0 80 80" fill="none" style={{ width: 80, height: 80, display: "block" }}>
+                        {/* Monitor outline */}
+                        <rect x="10" y="15" width="60" height="40" rx="3" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        <rect x="30" y="55" width="20" height="5" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        <rect x="25" y="60" width="30" height="3" stroke="#1d3461" strokeWidth="2" fill="none"/>
+                        {/* Sequence readout lines */}
+                        <line x1="15" y1="25" x2="65" y2="25" stroke="#1d3461" strokeWidth="1"/>
+                        <line x1="15" y1="30" x2="55" y2="30" stroke="#1d3461" strokeWidth="1"/>
+                        <line x1="15" y1="35" x2="60" y2="35" stroke="#1d3461" strokeWidth="1"/>
+                        <line x1="15" y1="40" x2="50" y2="40" stroke="#1d3461" strokeWidth="1"/>
+                        <line x1="15" y1="45" x2="58" y2="45" stroke="#1d3461" strokeWidth="1"/>
+                        {/* Colorful plasmid ring */}
+                        <circle cx="65" cy="50" r="8" fill="none" stroke="#d94f2b" strokeWidth="2"/>
+                        <circle cx="65" cy="50" r="5" fill="none" stroke="#5b7fb5" strokeWidth="2"/>
+                        <circle cx="65" cy="50" r="2" fill="#1a7a4a"/>
+                      </svg>
+                    </div>
+                    <div style={{ flex: 1, paddingLeft: "3rem", textAlign: "left" }}>
+                      <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#1d3461", marginBottom: "0.5rem" }}>Receive your plasmid</h3>
+                      <p style={{ fontSize: "0.9rem", color: "#4a5a78", lineHeight: 1.6 }}>We'll send you your plasmid and its verified sequence.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -298,22 +409,13 @@ export default function LandingPage() {
                 ))}
                 </tbody>
               </table>
-              <div style={{ marginTop: "2rem", background: "linear-gradient(135deg, rgba(91,127,181,0.1), rgba(29,52,97,0.06))", border: "1px solid #8fa8d0", borderRadius: 12, padding: "1.25rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem" }}>
-                <p style={{ fontSize: "0.9rem", color: "#4a5a78" }}>
-                  💾 <strong style={{ color: "#1d3461" }}>Want even less hassle?</strong> Let us store your vector for future use. Only $50 for 1 year of storage — no re-submission needed on your next order.
-                </p>
-                <a href="#" style={{ flexShrink: 0, display: "inline-flex", background: "none", border: "1.5px solid #1d3461", color: "#1d3461", padding: "0.45rem 1rem", borderRadius: 7, fontSize: "0.82rem", fontWeight: 600, textDecoration: "none", whiteSpace: "nowrap", transition: "all 0.15s" }}
-                   onMouseEnter={e => { e.currentTarget.style.background = "#1d3461"; e.currentTarget.style.color = "#fff"; }}
-                   onMouseLeave={e => { e.currentTarget.style.background = ""; e.currentTarget.style.color = "#1d3461"; }}
-                >Learn More</a>
-              </div>
             </div>
           </section>
 
           {/* Footer CTA */}
           <div style={{ padding: "6rem 3rem", textAlign: "center", maxWidth: 700, margin: "0 auto" }}>
-            <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: "2.8rem", letterSpacing: "-0.03em", color: "#1d3461", marginBottom: "1rem", lineHeight: 1.1 }}>
-              Ready to clone<br /><em>anything?</em>
+            <h2 style={{ fontFamily: "'Fraunces', serif", fontWeight: 300, fontSize: "2.8rem", letterSpacing: "-0.03em", color: "#1d3461", marginBottom: "1rem", lineHeight: 1.1 }}>
+              Ready to clone<br /><span style={{ fontFamily: "'DM Sans', sans-serif", fontStyle: "italic", fontWeight: 400 }}>anything?</span>
             </h2>
             <p style={{ color: "#4a5a78", fontSize: "1rem", lineHeight: 1.7, marginBottom: "2.5rem" }}>
               Join hundreds of researchers who've stopped wasting weekends in the lab. Send us your design and let VectorWeave handle the rest.
