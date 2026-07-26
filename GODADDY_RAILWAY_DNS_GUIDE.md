@@ -1,14 +1,41 @@
 # GoDaddy Domain to Railway DNS Configuration Guide
 
 ## Overview
-This guide explains how to configure your GoDaddy domain to point to your Railway deployment.
+This guide explains how to configure your GoDaddy domain to properly point to your Railway deployment using DNS records instead of domain forwarding. This ensures your custom domain (e.g., `yourdomain.com`) is what appears in the browser address bar, not the Railway subdomain (e.g., `your-project.railway.app`).
+
+### Domain Forwarding vs. DNS Records
+
+**Domain Forwarding (Current Setup)**:
+- User types `yourdomain.com` → Browser redirects to `your-project.railway.app`
+- Address bar shows Railway URL
+- Not ideal for branding and user experience
+
+**DNS Records (Target Setup)**:
+- User types `yourdomain.com` → Browser stays on `yourdomain.com`
+- Address bar shows your custom domain
+- Railway serves the content behind the scenes
+- Professional appearance and better SEO
 
 ## Prerequisites
 - A Railway account with a deployed project
 - A GoDaddy domain purchased and ready to use
 - Access to GoDaddy DNS management
+- Currently using domain forwarding (which needs to be removed)
 
 ## Step-by-Step Configuration
+
+### Step 0: Remove Domain Forwarding (IMPORTANT)
+
+Before setting up DNS records, you must remove the existing domain forwarding in GoDaddy:
+
+1. Log in to your GoDaddy account
+2. Go to "My Products" → "Domains"
+3. Click on your domain
+4. Look for "Forwarding" or "Domain Forwarding" section
+5. Delete any existing forwarding rules
+6. Save changes
+
+**Why this is necessary**: Domain forwarding causes the browser to redirect from your custom domain to the Railway URL, which is why you see the Railway subdomain in the address bar. DNS records will make your custom domain the actual host.
 
 ### Step 1: Get Your Railway Domain
 
@@ -32,7 +59,8 @@ It's recommended to configure both for better user experience.
 2. Go to "My Products" → "Domains"
 3. Click on your domain
 4. Click "DNS Management" or "DNS"
-5. You'll see existing DNS records - you may need to delete or modify them
+5. **Important**: Remove any existing A records or CNAME records for `@` (root domain) that might conflict
+6. You'll now add new DNS records to point to Railway
 
 #### For Root Domain (yourdomain.com)
 
@@ -87,7 +115,19 @@ Railway automatically provisions SSL certificates for custom domains. Once your 
 
 ## Common Issues and Solutions
 
-### Issue 1: DNS Not Propagating
+### Issue 1: Browser Still Shows Railway URL
+
+**Symptoms**: After setting up DNS records, browser still shows Railway URL (e.g., `your-project.railway.app`)
+
+**Solutions**:
+1. **Clear browser cache** - This is the most common issue
+2. **Wait for DNS propagation** - Can take 5-30 minutes, sometimes up to 48 hours
+3. **Check domain forwarding is disabled** - Go back to GoDaddy and ensure forwarding is completely removed
+4. **Try incognito/private browsing** - This bypasses cache
+5. **Check from different device/network** - Helps isolate caching issues
+6. **Verify DNS records are correct** - Use nslookup or dig to check what your domain resolves to
+
+### Issue 2: DNS Not Propagating
 
 **Symptoms**: Domain doesn't resolve to Railway after configuration
 

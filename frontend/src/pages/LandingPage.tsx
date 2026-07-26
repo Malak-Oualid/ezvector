@@ -1,7 +1,6 @@
-import BG_B64 from "../assets/hero.png";
+import BG_B64 from "../assets/hero1.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useState } from "react";
 
 /* ── Types ─────────────────────────────────────────── */
 interface CompareRow { feat: string; us: string; vendors: string; diy: string; }
@@ -15,69 +14,6 @@ const COMPARE_ROWS: CompareRow[] = [
   { feat: "Speed & Time", us: "Zero bench time and ~1 week turnaround.", vendors: "No hands-on work, but long delivery times.", diy: "Hours of setup, repeats, and troubleshooting." },
   { feat: "Total Cost", us: "Predictable and affordable. No hidden fees.", vendors: "High costs for long or complex builds.", diy: "High reagent, labor, and re-do costs." },
 ];
-
-/* ── DNA Weaving SVG ────────────────────────────────────── */
-function DNAWeaveSVG() {
-  const [hover, setHover] = useState(false);
-
-  return (
-      <svg
-          viewBox="-150 -150 300 300"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ display: "block", width: 280, height: 280, cursor: "pointer" }}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-      >
-        {/* Background threads */}
-        <g opacity="0.3">
-          {[-120, -80, -40, 0, 40, 80, 120].map((y, i) => (
-            <line key={i} x1="-140" y1={y} x2="140" y2={y} stroke="#d4dae8" strokeWidth="1.5" />
-          ))}
-          {[-120, -80, -40, 0, 40, 80, 120].map((x, i) => (
-            <line key={i} x1={x} y1="-140" x2={x} y2="140" stroke="#d4dae8" strokeWidth="1.5" />
-          ))}
-        </g>
-
-        {/* DNA double helix weaving pattern */}
-        <g style={{ transition: "transform 0.5s ease", transform: hover ? "scale(1.05)" : "scale(1)" }}>
-          {/* Left strand */}
-          <path d="M -60 -100 Q -30 -50 -60 0 T -60 100" fill="none" stroke="#5b7fb5" strokeWidth="4" strokeLinecap="round" />
-          {/* Right strand */}
-          <path d="M 60 -100 Q 30 -50 60 0 T 60 100" fill="none" stroke="#1a7a4a" strokeWidth="4" strokeLinecap="round" />
-
-          {/* Cross-links (weaving) */}
-          {[-80, -40, 0, 40, 80].map((y, i) => {
-            const offset = i % 2 === 0 ? 0 : 15;
-            return (
-              <g key={i}>
-                <line x1="-60" y1={y} x2="60" y2={y} stroke="#d94f2b" strokeWidth="2" opacity="0.6" />
-                <circle cx={-30 + offset} cy={y} r="4" fill="#d94f2b" />
-                <circle cx={30 - offset} cy={y} r="4" fill="#d94f2b" />
-              </g>
-            );
-          })}
-
-          {/* Embroidery needle */}
-          <g transform={hover ? "translate(10, -10)" : "translate(0, 0)"} style={{ transition: "transform 0.3s ease" }}>
-            <path d="M 80 -80 L 100 -60 L 95 -55 L 75 -75 Z" fill="#8fa8d0" />
-            <line x1="80" y1="-80" x2="60" y2="-100" stroke="#8fa8d0" strokeWidth="2" />
-            <circle cx="80" cy="-80" r="3" fill="#1d3461" />
-          </g>
-
-          {/* Thread from needle */}
-          <path d="M 60 -100 Q 40 -80 20 -60 T -20 -20" fill="none" stroke="#d94f2b" strokeWidth="1.5" strokeDasharray="4,4" opacity={hover ? 0.8 : 0.4} />
-        </g>
-
-        {/* Decorative corners */}
-        <g opacity="0.4">
-          <path d="M -130 -130 L -130 -110 L -110 -110" fill="none" stroke="#1d3461" strokeWidth="2" />
-          <path d="M 130 -130 L 130 -110 L 110 -110" fill="none" stroke="#1d3461" strokeWidth="2" />
-          <path d="M -130 130 L -130 110 L -110 110" fill="none" stroke="#1d3461" strokeWidth="2" />
-          <path d="M 130 130 L 130 110 L 110 110" fill="none" stroke="#1d3461" strokeWidth="2" />
-        </g>
-      </svg>
-  );
-}
 
 /* ── Main ───────────────────────────────────────────── */
 export default function LandingPage() {
@@ -127,36 +63,30 @@ export default function LandingPage() {
           }} />
           <div style={{
             position: "relative", zIndex: 5, flex: 1,
-            display: "grid", gridTemplateColumns: "1fr 1fr",
-            alignItems: "center", maxWidth: 1200, margin: "0 auto",
-            padding: "5rem 3rem 8rem", gap: "4rem", width: "100%",
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            maxWidth: 1200, margin: "0 auto",
+            padding: "5rem 2rem 8rem", width: "100%",
+            textAlign: "center",
           }}>
-            <div>
-              <h1 className="anim-1" style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: "clamp(3.2rem, 6vw, 5.5rem)", lineHeight: 1.0, letterSpacing: "-0.03em", marginBottom: "1rem" }}>
-                <span style={{ color: "#1d3461" }}>Clone</span><br />
-                <span style={{ color: "#d94f2b" }}>Anything.</span>
-              </h1>
-              <p className="anim-2" style={{ fontSize: "1.15rem", fontWeight: 400, color: "#4a5a78", letterSpacing: "0.01em", marginBottom: "0.75rem" }}>
-                You design it. We build it.
-              </p>
-              <p className="anim-3" style={{ fontSize: "0.95rem", color: "#4a5a78", lineHeight: 1.7, maxWidth: 420, marginBottom: "2.5rem" }}>
-                Multi-insert cloning, multi-site mutagenesis, and custom plasmid backbones — all delivered in days. Send your DNA and we'll do the rest.
-              </p>
-              <div className="anim-4" style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-                <a href="/order" style={{ background: "#d94f2b", color: "#fff", border: "none", padding: "0.85rem 2.2rem", borderRadius: 8, fontSize: "1rem", fontWeight: 600, textDecoration: "none", transition: "all 0.18s", display: "inline-block" }}
-                   onMouseEnter={e => { e.currentTarget.style.background = "#b84020"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(217,79,43,0.3)"; }}
-                   onMouseLeave={e => { e.currentTarget.style.background = "#d94f2b"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
-                >Start Cloning</a>
-                <a href="/services" style={{ color: "#1d3461", fontSize: "0.9rem", fontWeight: 500, textDecoration: "none", borderBottom: "1px solid transparent", transition: "border-color 0.15s" }}
-                   onMouseEnter={e => (e.currentTarget.style.borderBottomColor = "#1d3461")}
-                   onMouseLeave={e => (e.currentTarget.style.borderBottomColor = "transparent")}
-                >See our services →</a>
-              </div>
-            </div>
-            <div className="anim-5" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <div style={{ background: "rgba(255,255,255,0.75)", backdropFilter: "blur(8px)", borderRadius: 20, padding: "2.5rem", border: "1px solid rgba(212,218,232,0.7)", boxShadow: "0 12px 48px rgba(29,52,97,0.1)" }}>
-                <DNAWeaveSVG />
-              </div>
+            <h1 className="anim-1" style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: "clamp(3.2rem, 6vw, 5.5rem)", lineHeight: 1.0, letterSpacing: "-0.03em", marginBottom: "1rem" }}>
+              <span style={{ color: "#1d3461" }}>Clone</span> <span style={{ color: "#d94f2b" }}>Anything.</span>
+            </h1>
+            <p className="anim-2" style={{ fontSize: "1.15rem", fontWeight: 400, color: "#4a5a78", letterSpacing: "0.01em", marginBottom: "0.75rem" }}>
+              You design it. We build it.
+            </p>
+            <p className="anim-3" style={{ fontSize: "0.95rem", color: "#4a5a78", lineHeight: 1.7, maxWidth: 420, marginBottom: "2.5rem" }}>
+              Multi-insert cloning, multi-site mutagenesis, and custom plasmid backbones — all delivered in days. Send your DNA and we'll do the rest.
+            </p>
+            <div className="anim-4" style={{ display: "flex", gap: "1rem", alignItems: "center", justifyContent: "center" }}>
+              <a href="/order" style={{ background: "#d94f2b", color: "#fff", border: "none", padding: "0.85rem 2.2rem", borderRadius: 8, fontSize: "1rem", fontWeight: 600, textDecoration: "none", transition: "all 0.18s", display: "inline-block" }}
+                 onMouseEnter={e => { e.currentTarget.style.background = "#b84020"; e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(217,79,43,0.3)"; }}
+                 onMouseLeave={e => { e.currentTarget.style.background = "#d94f2b"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}
+              >Start Cloning</a>
+              <a href="/services" style={{ color: "#1d3461", fontSize: "0.9rem", fontWeight: 500, textDecoration: "none", borderBottom: "1px solid transparent", transition: "border-color 0.15s" }}
+                 onMouseEnter={e => (e.currentTarget.style.borderBottomColor = "#1d3461")}
+                 onMouseLeave={e => (e.currentTarget.style.borderBottomColor = "transparent")}
+              >See our services →</a>
             </div>
           </div>
           <div style={{ position: "absolute", bottom: -2, left: 0, right: 0, width: "100%", zIndex: 10, lineHeight: 0 }}>
